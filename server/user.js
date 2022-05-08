@@ -6,9 +6,10 @@ const neu = (req) => {
     const { email, password, first, last } = req.body;
     return db.querydb().then(({ rows }) => {
         exists = rows.filter((x) => x.email == email);
-        console.log(exists[0]);
+        console.log("exists?", exists[0]);
         if (exists[0]) {
-            return { e: exists[0].email, id: null };
+            let error = exists[0].email + " is not available";
+            return { e: error, id: null };
         }
 
         return crypt(password).then((hash) => {
