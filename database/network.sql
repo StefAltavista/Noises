@@ -1,6 +1,7 @@
 
 DROP TABLE IF EXISTS userData;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS resetCode;
 
 CREATE TABLE users(
      id             SERIAL PRIMARY KEY,
@@ -19,3 +20,10 @@ CREATE TABLE userData(
      country        VARCHAR, 
      website        VARCHAR
 );
+
+CREATE TABLE resetCode(
+     id             SERIAL PRIMARY KEY,
+     code           VARCHAR NOT NULL,
+     email          VARCHAR NOT NULL,
+     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)

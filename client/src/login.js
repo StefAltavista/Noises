@@ -1,33 +1,29 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
-export default class Registration extends Component {
+
+export default class Login extends Component {
     constructor() {
         super();
         this.state = { error: "" };
-        this.register = this.register.bind(this);
+        this.login = this.login.bind(this);
     }
-
-    register(e) {
+    //methods
+    login(e) {
         e.preventDefault();
         this.setState(
             {
-                first: e.target[0].value,
-                last: e.target[1].value,
-                email: e.target[2].value,
-                password: e.target[3].value,
+                email: e.target[0].value,
+                password: e.target[1].value,
             },
             () => {
-                fetch("/register", {
+                fetch("/login", {
                     headers: {
                         "Content-type": "application/json",
                     },
                     method: "POST",
                     body: JSON.stringify(this.state),
                 }).then((result) => {
-                    console.log("result: ", result);
-                    result.json().then((res) => {
-                        const { e, id } = res;
-                        console.log("res: ", res);
+                    result.json().then(({ e, id }) => {
+                        console.log(e, id);
                         if (e) {
                             this.setState({ error: e });
                         } else if (id) {
@@ -39,7 +35,6 @@ export default class Registration extends Component {
             }
         );
     }
-
     render() {
         return (
             <div>
@@ -48,19 +43,8 @@ export default class Registration extends Component {
                         <img src="/logo.png" id="logo" />
                         <h1>N O I S E S</h1>
                     </div>
-                    <form className="register" onSubmit={this.register}>
-                        <h3>Sign in</h3>
-                        <input
-                            type="text"
-                            name="first"
-                            placeholder="name"
-                        ></input>
-                        <input
-                            type="text"
-                            name="last"
-                            placeholder="surname"
-                            required
-                        ></input>
+                    <form className="register" onSubmit={this.login}>
+                        <h3>Log in</h3>
                         <input
                             type="email"
                             name="email"
@@ -76,10 +60,10 @@ export default class Registration extends Component {
                         {this.state.error && (
                             <p className="error">{this.state.error}</p>
                         )}
-                        <button>Register</button>
+                        <button>Enter</button>
 
                         <p className="log">
-                            already registered? <Link to="/login">Log in</Link>
+                            already registered? <a href="/">Log in</a>
                         </p>
                     </form>
                 </div>

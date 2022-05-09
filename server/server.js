@@ -4,7 +4,10 @@ const compression = require("compression");
 const path = require("path");
 const user = require("./user.js");
 const cookieSession = require("cookie-session");
+const { sendCode } = require("./SES.js");
 const { checkRegistration } = require("./middleware.js");
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("cryptingKey");
 app.use(
     cookieSession({
         secret: `MaskingTheCookieWithThisString`,
@@ -26,8 +29,7 @@ app.get("/user/id.json", (req, res) => {
     });
 });
 app.post("/register", checkRegistration, (req, res) => {
-    console.log("Request body:", req.body);
-    user.neu(req).then(({ e, id, init }) => {
+    user.signin(req).then(({ e, id, init }) => {
         if (e) {
             res.json({ e, id: null });
         } else {
@@ -36,6 +38,63 @@ app.post("/register", checkRegistration, (req, res) => {
         }
     });
 });
+app.post("/login", (req, res) => {
+    user.login(req).then(({ e, id, init }) => {
+        if (e) {
+            res.json({ e, id: null });
+        } else {
+            req.session.userId = id;
+            res.json({ e, id: init });
+        }
+    });
+});
+
+app.post("/api/password", (req, res) => {
+    user.passwordResetGetCode(req).then(({ e, rows }) => {
+        if (e) {
+            res.json({ error: e });
+            console.log("password reset error:", e);
+        } else {
+            const code = `code=${rows[0].code}&email=${req.body.email}`;
+            const encryptedQuery = cryptr.encrypt(code);
+            sendCode(encryptedQuery)
+                .then(() => {
+                    res.json({ e: null, success: true });
+                })
+                .catch((e) => {
+                    res.json({ e: e, success: false });
+                });
+        }
+    });
+});
+
+app.get("/api/password", (req, res) => {
+    const { tr } = req.query;
+    const decryptedquery = cryptr.decrypt(tr);
+    const code = decryptedquery.slice(5, 11);
+    const email = decryptedquery.slice(18);
+    console.log("code:", code);
+    console.log("email:", email);
+    user.passwordResetCheckCode(code, email).then(({ e, rows }) => {
+        if (e) {
+            res.json({ error: e });
+        } else {
+            console.log("succes! redirect to update password!", rows);
+            res.json({ error: null, verified: true, email: rows.email });
+        }
+    });
+});
+
+app.put("/api/password", (req, res) => {
+    const { email, newpassword } = req.body;
+    console.log("UPDATE", email, newpassword);
+    user.passwordResetUpdate(email, newpassword)
+        .then(() => console.log("updated"))
+        .catch((e) => {
+            console.log("error during password update!!!", e);
+        });
+});
+
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });

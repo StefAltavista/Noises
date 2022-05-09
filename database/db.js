@@ -22,34 +22,38 @@ var where;
 
 const querydb = () => db.query(`SELECT * FROM users;`);
 
-const signatoires = (ct, cn) => {
-    if (ct) {
-        where = ` WHERE LOWER(userData.city) = LOWER('${ct}')`;
-    } else if (cn) {
-        where = ` WHERE LOWER(userData.country) = LOWER('${cn}')`;
-    } else {
-        where = "";
-    }
-
-    return db.query(`SELECT users.name, userData.age, userData.city, userData.country, userData.website 
-                                                FROM users
-                                                FULL JOIN userData
-                                                ON users.id = userData.user_id
-                                                ${where};`);
+const queryByEmail = (email) => {
+    return db.query(`SELECT * FROM users WHERE users.email = $1 `, [email]);
 };
 
 const queryById = (id) =>
-    db.query(
-        `SELECT * FROM users FULL JOIN userData ON users.id=userData.user_id FULL JOIN signatures ON users.id=signatures.user_id WHERE users.id = $1`,
-        [id]
-    );
+    db.query(`SELECT * FROM users WHERE users.id = $1`, [id]);
 const register = (email, hash, name, surname) => {
     return db.query(
         `INSERT INTO users (email,hash,name,surname) VALUES( $1 , $2, $3, $4) RETURNING id`,
         [email, hash, name, surname]
     );
 };
+const newResetCode = (code, email) => {
+    return db.query(
+        `INSERT INTO resetCode (code, email) VALUES ($1, $2) RETURNING *`,
+        [code, email]
+    );
+};
 
+const queryResetCode = (code, email) => {
+    return db.query(
+        `SELECT * FROM resetCode WHERE code=$1 AND email=$2 AND CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'`,
+        [code, email]
+    );
+};
+
+const queryUpdatePassword = (email, hash) => {
+    return db.query(`UPDATE users SET email = $1, hash = $2 WHERE email=$1`, [
+        email,
+        hash,
+    ]);
+};
 const add = (user_id, age, city, country, website) => {
     return db.query(
         `INSERT INTO userData (user_id, age, city, country, website)
@@ -98,9 +102,12 @@ const update = (
 
 module.exports = {
     querydb,
-    signatoires,
+    queryByEmail,
     queryById,
     register,
+    newResetCode,
+    queryResetCode,
+    queryUpdatePassword,
     add,
     sign,
     deletesignature,
