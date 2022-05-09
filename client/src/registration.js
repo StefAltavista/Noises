@@ -3,13 +3,11 @@ export default class Registration extends Component {
     constructor() {
         super();
         this.state = { error: "" };
-
         this.register = this.register.bind(this);
     }
 
     register(e) {
         e.preventDefault();
-        console.log("e", e.target[0].value);
         this.setState(
             {
                 first: e.target[0].value,
@@ -27,11 +25,8 @@ export default class Registration extends Component {
                 })
                     .then((result) => result.json())
                     .then(({ e, id }) => {
-                        console.log("fetch:", e, id);
                         if (e) {
-                            console.log("error", e);
                             this.setState({ error: e });
-                            console.log("error:", this.state.error);
                         } else if (id) {
                             this.init = id;
                             return location.reload();
