@@ -28,6 +28,18 @@ app.get("/user/id.json", (req, res) => {
         userId: req.session.userId,
     });
 });
+
+app.get("/user/verification", (req, res) => {
+    res.json({
+        verified: req.session.verified,
+        email: req.session.email,
+    });
+});
+app.get("/user/clearVerification", (req, res) => {
+    req.session = null;
+    res.json({ ok: "ok" });
+});
+
 app.post("/register", checkRegistration, (req, res) => {
     user.signin(req).then(({ e, id, init }) => {
         if (e) {
@@ -59,7 +71,11 @@ app.post("/api/password", (req, res) => {
             const encryptedQuery = cryptr.encrypt(code);
             sendCode(encryptedQuery)
                 .then(() => {
-                    res.json({ e: null, success: true });
+                    res.json({
+                        e: null,
+                        success:
+                            "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
+                    });
                 })
                 .catch((e) => {
                     res.json({ e: e, success: false });
@@ -77,10 +93,15 @@ app.get("/api/password", (req, res) => {
     console.log("email:", email);
     user.passwordResetCheckCode(code, email).then(({ e, rows }) => {
         if (e) {
-            res.json({ error: e });
+            console.log(e);
+            res.redirect("/");
         } else {
             console.log("succes! redirect to update password!", rows);
-            res.json({ error: null, verified: true, email: rows.email });
+            req.session.verified = true;
+            req.session.email = rows.email;
+
+            res.redirect("/");
+            //res.json({ error: null, verified: true, email: rows.email });
         }
     });
 });

@@ -1,5 +1,6 @@
 import Registration from "./registration";
 import Login from "./login";
+import ResetPassword from "./resetpassword";
 import { BrowserRouter, Route } from "react-router-dom";
 
 const Welcome = () => {
@@ -12,6 +13,9 @@ const Welcome = () => {
                     </Route>
                     <Route path="/login">
                         <Login />
+                    </Route>
+                    <Route path="/resetpassword">
+                        <ResetPassword />
                     </Route>
                 </div>
             </BrowserRouter>

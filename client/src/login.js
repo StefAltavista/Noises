@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 
 export default class Login extends Component {
     constructor() {
@@ -62,8 +63,12 @@ export default class Login extends Component {
                         )}
                         <button>Enter</button>
 
-                        <p className="log">
-                            already registered? <a href="/">Log in</a>
+                        <p className="register">
+                            Dont have an account <Link to="/">Sign in</Link>
+                        </p>
+                        <p className="reset">
+                            Forgot your password?
+                            <Link to="/resetpassword">Click here</Link>
                         </p>
                     </form>
                 </div>
