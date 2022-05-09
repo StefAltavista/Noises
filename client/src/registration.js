@@ -10,40 +10,35 @@ export default class Registration extends Component {
     register(e) {
         e.preventDefault();
         console.log("e", e.target[0].value);
-        this.setState({
-            first: e.target[0].value,
-            last: e.target[1].value,
-            email: e.target[2].value,
-            password: e.target[3].value,
-        });
-        console.log("out state:", this.state);
-
-        let reqBody = {
-            first: e.target[0].value,
-            last: e.target[1].value,
-            email: e.target[2].value,
-            password: e.target[3].value,
-        };
-
-        fetch("/register", {
-            headers: {
-                "Content-type": "application/json",
+        this.setState(
+            {
+                first: e.target[0].value,
+                last: e.target[1].value,
+                email: e.target[2].value,
+                password: e.target[3].value,
             },
-            method: "POST",
-            body: JSON.stringify(reqBody),
-        })
-            .then((result) => result.json())
-            .then(({ e, id }) => {
-                console.log("fetch:", e, id);
-                if (e) {
-                    console.log("error", e);
-                    this.setState({ error: e });
-                    console.log("error:", this.state.error);
-                } else if (id) {
-                    this.init = id;
-                    return location.reload();
-                }
-            });
+            () => {
+                fetch("/register", {
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                    method: "POST",
+                    body: JSON.stringify(this.state),
+                })
+                    .then((result) => result.json())
+                    .then(({ e, id }) => {
+                        console.log("fetch:", e, id);
+                        if (e) {
+                            console.log("error", e);
+                            this.setState({ error: e });
+                            console.log("error:", this.state.error);
+                        } else if (id) {
+                            this.init = id;
+                            return location.reload();
+                        }
+                    });
+            }
+        );
     }
 
     render() {
