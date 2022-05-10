@@ -4,9 +4,9 @@ import ReactDOM from "react-dom";
 //components
 import Welcome from "./welcome.js";
 import UpdatePs from "./updateps.js";
+import App from "./app.js";
 
 (async function () {
-    console.log("SUPER IFEE!!!!");
     const verification = await fetch("/user/verification");
     const verificationData = await verification.json();
     if (verificationData.verified && verificationData.email) {
@@ -21,10 +21,7 @@ import UpdatePs from "./updateps.js";
         if (!idData.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
-            ReactDOM.render(
-                <img src="/logo.png" alt="logo" id="logo" />,
-                document.querySelector("main")
-            );
+            ReactDOM.render(<App />, document.querySelector("main"));
         }
     }
 })();

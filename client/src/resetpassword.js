@@ -32,10 +32,6 @@ export default class ResetPassword extends Component {
     render() {
         return (
             <div id="resetComponent">
-                <div id="noise">
-                    <img src="/logo.png" id="logo" />
-                    <h1>N O I S E S</h1>
-                </div>
                 {this.state.error && (
                     <p className="error">{this.state.error}</p>
                 )}

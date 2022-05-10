@@ -42,48 +42,36 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <div>
-                <div className="welcomebody">
-                    <div id="noise">
-                        <img src="/logo.png" id="logo" />
-                        <h1>N O I S E S</h1>
-                    </div>
-                    <form className="register" onSubmit={this.register}>
-                        <h3>Sign in</h3>
-                        <input
-                            type="text"
-                            name="first"
-                            placeholder="name"
-                        ></input>
-                        <input
-                            type="text"
-                            name="last"
-                            placeholder="surname"
-                            required
-                        ></input>
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="email"
-                            required
-                        ></input>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="password"
-                            required
-                        ></input>
-                        {this.state.error && (
-                            <p className="error">{this.state.error}</p>
-                        )}
-                        <button>Register</button>
+            <form className="register" onSubmit={this.register}>
+                <h3>Sign in</h3>
+                <input type="text" name="first" placeholder="name"></input>
+                <input
+                    type="text"
+                    name="last"
+                    placeholder="surname"
+                    required
+                ></input>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="email"
+                    required
+                ></input>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="password"
+                    required
+                ></input>
+                {this.state.error && (
+                    <p className="error">{this.state.error}</p>
+                )}
+                <button>Register</button>
 
-                        <p className="log">
-                            already registered? <Link to="/login">Log in</Link>
-                        </p>
-                    </form>
-                </div>
-            </div>
+                <p className="log">
+                    already registered? <Link to="/login">Log in</Link>
+                </p>
+            </form>
         );
     }
 }

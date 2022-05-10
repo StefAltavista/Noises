@@ -4,6 +4,10 @@ const compression = require("compression");
 const path = require("path");
 const user = require("./user.js");
 const cookieSession = require("cookie-session");
+const multer = require("multer");
+const { upload } = require("./s3");
+const uidSafe = require("uid-safe");
+const db = require("./../database/db.js");
 const { sendCode } = require("./SES.js");
 const { checkRegistration } = require("./middleware.js");
 const Cryptr = require("cryptr");
@@ -14,7 +18,25 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
-let exists;
+
+// multer --> lookup documentation
+
+const storage = multer.diskStorage({
+    // specify directory folder for temp uploads
+    destination: (req, file, callback) => {
+        callback(null, path.join(__dirname, "uploads")); // null (if no err!)
+    },
+    // specify filename
+    filename: (req, file, callback) => {
+        uidSafe(24).then((randomId) => {
+            const fileName = `${randomId}${path.extname(file.originalname)}`; // null (if no err!)
+            callback(null, fileName);
+        });
+    },
+});
+const uploader = multer({ storage });
+
+app.use(express.urlencoded({ extended: false }));
 
 //compressing the response .
 app.use(compression());
@@ -38,6 +60,25 @@ app.get("/user/verification", (req, res) => {
 app.get("/user/clearVerification", (req, res) => {
     req.session = null;
     res.json({ ok: "ok" });
+});
+
+app.get("/user", async (req, res) => {
+    const currentUser = await user.getUser(req.session.userId);
+    res.json(currentUser);
+});
+
+app.post("/upload_profile_pic", uploader.single("file"), upload, (req, res) => {
+    console.log("\n\nPOST, req file filename \n", req.file.filename, "\n\n");
+    let imgUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
+    if (req.file) {
+        db.insertImg(imgUrl, req.session.userId).then(({ rows }) => {
+            res.json(rows[0]);
+        });
+    } else {
+        res.json({
+            success: false,
+        });
+    }
 });
 
 app.post("/register", checkRegistration, (req, res) => {

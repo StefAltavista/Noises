@@ -1,7 +1,15 @@
 const bcrypt = require("bcryptjs");
 const cryptoRandomString = require("crypto-random-string");
 const db = require("./../database/db.js");
-var exists, data, signed, check;
+var exists, check;
+
+const crypt = (p) => {
+    return bcrypt.genSalt().then((s) => {
+        return bcrypt.hash(p, s);
+    });
+};
+
+const decrypt = (p, h) => bcrypt.compare(p, h);
 
 const signin = (req) => {
     const { email, password, first, last } = req.body;
@@ -79,15 +87,14 @@ const passwordResetUpdate = (email, newpassword) => {
     });
 };
 
-const crypt = (p) => {
-    return bcrypt.genSalt().then((s) => {
-        return bcrypt.hash(p, s);
+const getUser = (id) => {
+    return db.queryById(id).then(({ rows }) => {
+        return rows;
     });
 };
 
-const decrypt = (p, h) => bcrypt.compare(p, h);
-
 module.exports = {
+    getUser,
     signin,
     login,
     passwordResetGetCode,

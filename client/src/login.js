@@ -40,10 +40,6 @@ export default class Login extends Component {
         return (
             <div>
                 <div className="welcomebody">
-                    <div id="noise">
-                        <img src="/logo.png" id="logo" />
-                        <h1>N O I S E S</h1>
-                    </div>
                     <form className="register" onSubmit={this.login}>
                         <h3>Log in</h3>
                         <input

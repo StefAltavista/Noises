@@ -100,6 +100,14 @@ const update = (
     );
 };
 
+//UPDATE table_name SET column1 = value1 WHERE condition
+const insertImg = (imgUrl, id) => {
+    return db.query(
+        `UPDATE users SET imgUrl = $1 WHERE users.id=$2 RETURNING *`,
+        [imgUrl, id]
+    );
+};
+
 module.exports = {
     querydb,
     queryByEmail,
@@ -108,6 +116,8 @@ module.exports = {
     newResetCode,
     queryResetCode,
     queryUpdatePassword,
+    insertImg,
+    //olds
     add,
     sign,
     deletesignature,
