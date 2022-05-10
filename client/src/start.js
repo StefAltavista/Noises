@@ -5,30 +5,57 @@ import ReactDOM from "react-dom";
 import Welcome from "./welcome.js";
 import UpdatePs from "./updateps.js";
 
-fetch("/user/verification").then((response) => {
-    response.json().then((data) => {
-        if (data.verified && data.email) {
-            fetch("/user/clearVerification");
+(async function () {
+    console.log("SUPER IFEE!!!!");
+    const verification = await fetch("/user/verification");
+    const verificationData = await verification.json();
+    if (verificationData.verified && verificationData.email) {
+        fetch("/user/clearVerification");
+        ReactDOM.render(
+            <UpdatePs email={verificationData.email} />,
+            document.querySelector("main")
+        );
+    } else {
+        const id = await fetch("/user/id.json");
+        const idData = await id.json();
+        if (!idData.userId) {
+            ReactDOM.render(<Welcome />, document.querySelector("main"));
+        } else {
             ReactDOM.render(
-                <UpdatePs email={data.email} />,
+                <img src="/logo.png" alt="logo" id="logo" />,
                 document.querySelector("main")
             );
-        } else {
-            fetch("/user/id.json")
-                .then((response) => response.json())
-                .then((data) => {
-                    if (!data.userId) {
-                        ReactDOM.render(
-                            <Welcome />,
-                            document.querySelector("main")
-                        );
-                    } else {
-                        ReactDOM.render(
-                            <img src="/logo.png" alt="logo" id="logo" />,
-                            document.querySelector("main")
-                        );
-                    }
-                });
         }
-    });
-});
+    }
+})();
+
+//////////////////////////////////////////////////////////////////////
+// Router without async/await (dot-then-hell)
+//
+// fetch("/user/verification").then((response) => {
+//     response.json().then((data) => {
+//         if (data.verified && data.email) {
+//             fetch("/user/clearVerification");
+//             ReactDOM.render(
+//                 <UpdatePs email={data.email} />,
+//                 document.querySelector("main")
+//             );
+//         } else {
+//             fetch("/user/id.json")
+//                 .then((response) => response.json())
+//                 .then((data) => {
+//                     if (!data.userId) {
+//                         ReactDOM.render(
+//                             <Welcome />,
+//                             document.querySelector("main")
+//                         );
+//                     } else {
+//                         ReactDOM.render(
+//                             <img src="/logo.png" alt="logo" id="logo" />,
+//                             document.querySelector("main")
+//                         );
+//                     }
+//                 });
+//         }
+//     });
+// });
