@@ -8,7 +8,8 @@ CREATE TABLE users(
      hash           VARCHAR NOT NULL CHECK (hash != ''),
      name           VARCHAR,  
      surname        VARCHAR,  
-     imgUrl         VARCHAR,  
+     imgUrl         VARCHAR, 
+     bio            TEXT, 
      created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
      
 );

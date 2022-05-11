@@ -2,17 +2,16 @@ export default function EditBio({ bio, closeEdit, updateBio }) {
     async function submit(e) {
         e.preventDefault();
 
-        const reqBody = JSON.stringify({ newbio: e.target.bio.value });
-        console.log("req body:", reqBody);
+        const reqBody = JSON.stringify({ bio: e.target.bio.value });
 
         const response = await fetch("/editbio", {
             headers: { "content-type": "application/json" },
             method: "POST",
             body: reqBody,
         });
-        const newBio = await response.json();
+        const updated = await response.json();
 
-        updateBio(newBio.imgurl);
+        updateBio(updated);
     }
 
     return (

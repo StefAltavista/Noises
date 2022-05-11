@@ -11,9 +11,10 @@ export default function ImgModal({ closeModal, updatePicture }) {
             method: "POST",
             body: formData,
         });
-        const newimgUrl = await response.json();
+        const { imgurl } = await response.json();
+        console.log(imgurl);
         loading = false;
-        updatePicture(newimgUrl.imgurl);
+        updatePicture(imgurl);
     }
 
     return (

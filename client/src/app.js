@@ -12,13 +12,14 @@ export default class App extends Component {
     async componentDidMount() {
         const userData = await fetch("/user");
         const user = await userData.json();
-        console.log(user[0]);
+        console.log("user:", user[0]);
         this.setState(user[0]);
     }
     update(newValues) {
-        console.log("update app:", newValues);
-        console.log(this.state);
-        this.setState({ imgurl: newValues.imgurl });
+        console.log("update app with:", newValues);
+        this.setState(newValues, () => {
+            console.log("New State:", this.state);
+        });
     }
 
     render() {
@@ -37,6 +38,7 @@ export default class App extends Component {
                                 name={this.state.name}
                                 surname={this.state.surname}
                                 imgurl={this.state.imgurl}
+                                bio={this.state.bio}
                                 update={this.update}
                             ></Mainbody>
                         </Route>

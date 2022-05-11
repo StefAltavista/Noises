@@ -22,8 +22,9 @@ export default class Mainbody extends Component {
     toggleditbio() {
         this.setState({ editbio: !this.state.editbio });
     }
-    editbiography() {
-        this.setState({ editbio: !this.state.editbio });
+    editbiography(updated) {
+        this.toggleditbio();
+        this.props.update({ bio: updated });
     }
 
     render() {
@@ -64,7 +65,7 @@ export default class Mainbody extends Component {
                     <EditBio
                         bio={this.state.bio}
                         closeEdit={this.toggleditbio}
-                        updateBio={this.updateBio}
+                        updateBio={this.editbiography}
                     />
                 )}
             </div>

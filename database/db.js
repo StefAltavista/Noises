@@ -107,6 +107,12 @@ const insertImg = (imgUrl, id) => {
         [imgUrl, id]
     );
 };
+const queryUpdateBio = (bio, id) => {
+    return db.query(`UPDATE users SET bio = $1 WHERE users.id=$2 RETURNING *`, [
+        bio,
+        id,
+    ]);
+};
 
 module.exports = {
     querydb,
@@ -117,6 +123,7 @@ module.exports = {
     queryResetCode,
     queryUpdatePassword,
     insertImg,
+    queryUpdateBio,
     //olds
     add,
     sign,
