@@ -81,6 +81,10 @@ app.post("/upload_profile_pic", uploader.single("file"), upload, (req, res) => {
     }
 });
 
+app.post("/editbio", (req, res) => {
+    console.log("\nserver post request for editing bio\nreq.body:", req.body);
+});
+
 app.post("/register", checkRegistration, (req, res) => {
     user.signin(req).then(({ e, id, init }) => {
         if (e) {

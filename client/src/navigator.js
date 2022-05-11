@@ -1,18 +1,14 @@
 import { Component } from "react";
-import ImgModal from "./imgModal.js";
+import SettingsMenu from "./settingsmenu";
 
 export default class Navigator extends Component {
     constructor(props) {
         super(props);
         this.state = { imgModal: false };
-        this.imgMod = this.imgMod.bind(this);
-        this.updatePicture = this.updatePicture.bind(this);
+        this.settingsMenu = this.settingsMenu.bind(this);
     }
-    imgMod() {
-        this.setState({ imgModal: !this.state.imgModal });
-    }
-    updatePicture(img) {
-        this.setState({ imgUrl: img });
+    settingsMenu() {
+        this.setState({ settingsMenu: !this.state.settingsMenu });
     }
 
     render() {
@@ -24,20 +20,17 @@ export default class Navigator extends Component {
 
                 <div id="user">
                     <p>
-                        {this.props.name} {this.props.surname}
+                        {this.props.name} {this.props.surname[0]}.
                     </p>
                     <img
-                        src={this.state.imgUrl}
-                        onClick={this.imgMod}
+                        src={this.props.imgurl}
+                        onClick={this.settingsMenu}
                         id="profPic"
                     />
                 </div>
 
-                {this.state.imgModal && (
-                    <ImgModal
-                        closeModal={this.imgMod}
-                        updatePicture={this.updatePicture}
-                    />
+                {this.state.settingsMenu && (
+                    <SettingsMenu settingsMenu={this.settingsMenu} />
                 )}
             </nav>
         );
