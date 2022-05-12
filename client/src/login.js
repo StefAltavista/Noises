@@ -10,12 +10,14 @@ export default class Login extends Component {
     //methods
     login(e) {
         e.preventDefault();
+
         this.setState(
             {
                 email: e.target[0].value,
                 password: e.target[1].value,
             },
             () => {
+                //fetch in the setState callback because setState is Asyncronous//
                 fetch("/login", {
                     headers: {
                         "Content-type": "application/json",

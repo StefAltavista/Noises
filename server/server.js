@@ -10,6 +10,7 @@ const uidSafe = require("uid-safe");
 const db = require("./../database/db.js");
 const { sendCode } = require("./SES.js");
 const { checkRegistration } = require("./middleware.js");
+const { search } = require("./methods.js");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("cryptingKey");
 app.use(
@@ -162,6 +163,16 @@ app.put("/api/password", (req, res) => {
         .catch((e) => {
             console.log("error during password update!!!", e);
         });
+});
+
+app.get("/api/search", (req, res) => {
+    console.log(req.query.s);
+    search(req.query)
+        .then(({ matches }) => {
+            console.log(matches);
+            res.json({ matches });
+        })
+        .catch((e) => console.log("internal Server/Search error: \n", e));
 });
 
 app.get("*", function (req, res) {

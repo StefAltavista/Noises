@@ -3,7 +3,7 @@ import { Component } from "react";
 import ImgModal from "./imgModal.js";
 import EditBio from "./editbio.js";
 
-export default class Mainbody extends Component {
+export default class MyAccount extends Component {
     constructor() {
         super();
         this.state = { editbio: false };

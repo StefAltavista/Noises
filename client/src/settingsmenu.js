@@ -3,7 +3,7 @@ export default function SettingsMenu({ settingsMenu }) {
         <div>
             <p onClick={settingsMenu}>X</p>
             <ul>
-                <li>Account</li>
+                <li>My Account</li>
                 <li>Log Out</li>
             </ul>
         </div>

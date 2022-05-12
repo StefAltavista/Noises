@@ -28,10 +28,10 @@ const queryByEmail = (email) => {
 
 const queryById = (id) =>
     db.query(`SELECT * FROM users WHERE users.id = $1`, [id]);
-const register = (email, hash, name, surname) => {
+const register = (email, hash, name, surname, imgUrl) => {
     return db.query(
-        `INSERT INTO users (email,hash,name,surname) VALUES( $1 , $2, $3, $4) RETURNING id`,
-        [email, hash, name, surname]
+        `INSERT INTO users (email,hash,name,surname, imgUrl) VALUES( $1 , $2, $3, $4, $5) RETURNING id`,
+        [email, hash, name, surname, imgUrl]
     );
 };
 const newResetCode = (code, email) => {
@@ -113,7 +113,12 @@ const queryUpdateBio = (bio, id) => {
         id,
     ]);
 };
-
+const search = (s) => {
+    return db.query(
+        `SELECT * FROM users WHERE name ILIKE $1 OR surname ILIKE $1;`,
+        [s + "%"]
+    );
+};
 module.exports = {
     querydb,
     queryByEmail,
@@ -124,6 +129,7 @@ module.exports = {
     queryUpdatePassword,
     insertImg,
     queryUpdateBio,
+    search,
     //olds
     add,
     sign,

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Navigator from "./navigator.js";
-import Mainbody from "./me.js";
+import MyAccount from "./myAccount.js";
 import { BrowserRouter, Route } from "react-router-dom";
 
 export default class App extends Component {
@@ -26,6 +26,7 @@ export default class App extends Component {
         return (
             <div>
                 <Navigator
+                    id={this.state.id}
                     name={this.state.name}
                     surname={this.state.surname}
                     imgurl={this.state.imgurl}
@@ -34,13 +35,13 @@ export default class App extends Component {
                 <BrowserRouter>
                     <div>
                         <Route exact path="/">
-                            <Mainbody
+                            <MyAccount
                                 name={this.state.name}
                                 surname={this.state.surname}
                                 imgurl={this.state.imgurl}
                                 bio={this.state.bio}
                                 update={this.update}
-                            ></Mainbody>
+                            ></MyAccount>
                         </Route>
                     </div>
                 </BrowserRouter>
