@@ -7,9 +7,18 @@ export default class Navigator extends Component {
         super(props);
         this.state = { imgModal: false, search: false };
         this.settingsMenu = this.settingsMenu.bind(this);
+        this.searchResults = this.searchResults.bind(this);
+        this.toggleSearch = this.toggleSearch.bind(this);
     }
     settingsMenu() {
         this.setState({ settingsMenu: !this.state.settingsMenu });
+    }
+    searchResults(match) {
+        console.log("From Navigator, calling SearchResult in parent", match);
+        this.props.searchResults(match);
+    }
+    toggleSearch() {
+        this.setState({ search: !this.state.search });
     }
 
     render() {
@@ -17,16 +26,20 @@ export default class Navigator extends Component {
             <nav>
                 <div id="search">
                     <img
-                        src="./searchLent.png"
-                        onClick={() => {
-                            this.setState({ search: !this.state.search });
-                        }}
+                        src="/searchLent.png"
+                        onClick={this.toggleSearch}
                         id="searchLent"
                     />
-                    {this.state.search && <Search myId={this.props.id} />}
+                    {this.state.search && (
+                        <Search
+                            myId={this.props.id}
+                            searchResults={this.searchResults}
+                            toggleSearch={this.toggleSearch}
+                        />
+                    )}
                 </div>
 
-                <img src="./logo.png" id="logo" />
+                <img src="/logo.png" id="logo" />
                 <div id="user">
                     <p>
                         {this.props.name} {this.props.surname[0]}.

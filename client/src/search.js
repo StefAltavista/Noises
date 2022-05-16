@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-
-export default function Search({ myId }) {
+import { Link } from "react-router-dom";
+export default function Search({ myId, searchResults, toggleSearch }) {
     const [search, setSearch] = useState();
     const [match, setMatch] = useState();
     console.log(myId);
@@ -15,6 +15,13 @@ export default function Search({ myId }) {
                 .then(({ matches }) => {
                     console.log("from db:", matches);
                     if (!abort) {
+                        if (matches) {
+                            setMatch(matches);
+                            searchResults(matches);
+                        } else {
+                            setMatch(false);
+                            searchResults(false);
+                        }
                         matches ? setMatch(matches) : setMatch(false);
                     }
                 });
@@ -39,18 +46,24 @@ export default function Search({ myId }) {
 
             {match && (
                 <div id="results">
-                    {match.map((m) => {
-                        if (m.id == myId) return;
+                    {match.map((x) => {
+                        if (x.id == myId) return;
                         return (
-                            <li key={m.id}>
-                                <div id="each">
-                                    <img src={m.imgurl} />
-                                    <p> {m.name} </p>
-                                    <p> {m.surname}</p>
-                                </div>
+                            <li onClick={toggleSearch} key={x.id}>
+                                <Link to={`/user/${x.id}`}>
+                                    <div id="each">
+                                        <img src={x.imgurl} />
+                                        <p> {x.name} </p>
+                                        <p> {x.surname}</p>
+                                    </div>
+                                </Link>
                             </li>
                         );
                     })}
+
+                    <p id="showMore">
+                        <Link to="/results">Show all results</Link>
+                    </p>
                 </div>
             )}
         </div>

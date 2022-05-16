@@ -45,6 +45,8 @@ nav #search {
 }
 #search #results {
     width: auto;
+    height: 200px;
+    overflow: scroll;
     position: absolute;
     top: 65px;
     left: 60px;
@@ -142,7 +144,7 @@ nav #profPic {
     background-color: rgba(0, 0, 0, 0.352);
     color: whitesmoke;
 }
-#me {
+#account {
     padding-top: 20px;
     background-color: rgb(22, 26, 31);
     height: 100%;

@@ -159,9 +159,9 @@ app.put("/api/password", (req, res) => {
     const { email, newpassword } = req.body;
     console.log("UPDATE", email, newpassword);
     user.passwordResetUpdate(email, newpassword)
-        .then(() => console.log("updated"))
-        .catch((e) => {
-            console.log("error during password update!!!", e);
+        .then(() => res.json({ success: true }))
+        .catch(() => {
+            res.json({ success: false });
         });
 });
 
@@ -174,7 +174,17 @@ app.get("/api/search", (req, res) => {
         })
         .catch((e) => console.log("internal Server/Search error: \n", e));
 });
-
+app.post("/api/getuser", (req, res) => {
+    console.log("server getuser:", req.body);
+    user.getUser(req.body.id).then((result) => {
+        if (!result[0]) {
+            console.log("nothing here!");
+            result[0] = { nomatch: true };
+        }
+        res.json(result);
+        console.log(result);
+    });
+});
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });

@@ -4,14 +4,15 @@ import ImgModal from "./imgModal.js";
 import EditBio from "./editbio.js";
 
 export default class MyAccount extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { editbio: false };
         this.imgMod = this.imgMod.bind(this);
         this.updatePicture = this.updatePicture.bind(this);
         this.editbiography = this.editbiography.bind(this);
         this.toggleditbio = this.toggleditbio.bind(this);
     }
+
     imgMod() {
         this.setState({ imgModal: !this.state.imgModal });
     }
@@ -29,7 +30,7 @@ export default class MyAccount extends Component {
 
     render() {
         return (
-            <div id="me">
+            <div id="account">
                 <div id="profile">
                     <img
                         id="avatar"
@@ -42,7 +43,7 @@ export default class MyAccount extends Component {
                         <div id="bio">
                             {this.props.bio ? (
                                 <div>
-                                    <p>{this.props.bio}</p>
+                                    <p id="biography">{this.props.bio}</p>
                                     <button onClick={this.toggleditbio}>
                                         edit
                                     </button>

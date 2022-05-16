@@ -4,14 +4,21 @@ export default function EditBio({ bio, closeEdit, updateBio }) {
 
         const reqBody = JSON.stringify({ bio: e.target.bio.value });
 
-        const response = await fetch("/editbio", {
+        // const response = await fetch("/editbio", {
+        //     headers: { "content-type": "application/json" },
+        //     method: "POST",
+        //     body: reqBody,
+        // });
+        // const updated = await response.json();
+        // updateBio(updated);
+
+        fetch("/editbio", {
             headers: { "content-type": "application/json" },
             method: "POST",
             body: reqBody,
-        });
-        const updated = await response.json();
-
-        updateBio(updated);
+        })
+            .then((response) => response.json())
+            .then((updated) => updateBio(updated));
     }
 
     return (
@@ -20,7 +27,7 @@ export default function EditBio({ bio, closeEdit, updateBio }) {
             <p>update your biography</p>
             <form id="editBio" onSubmit={submit}>
                 <textarea value={bio} name="bio"></textarea>
-                <button>update</button>
+                <button id="updateBioButton">update</button>
             </form>
         </div>
     );
