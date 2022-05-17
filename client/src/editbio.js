@@ -1,24 +1,28 @@
 export default function EditBio({ bio, closeEdit, updateBio }) {
     async function submit(e) {
-        e.preventDefault();
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+        // e.preventDefault();
 
-        const reqBody = JSON.stringify({ bio: e.target.bio.value });
-
-        // const response = await fetch("/editbio", {
-        //     headers: { "content-type": "application/json" },
-        //     method: "POST",
-        //     body: reqBody,
-        // });
-        // const updated = await response.json();
-        // updateBio(updated);
-
-        fetch("/editbio", {
+        const response = await fetch("/editbio", {
             headers: { "content-type": "application/json" },
             method: "POST",
-            body: reqBody,
-        })
-            .then((response) => response.json())
-            .then((updated) => updateBio(updated));
+            body: JSON.stringify({ bio: e.target.bio.value }),
+        });
+        const updated = await response.json();
+        updateBio(updated);
+
+        // fetch("/editbio", {
+        //     headers: { "content-type": "application/json" },
+        //     method: "POST",
+        //     body: JSON.stringify({ bio: e.target.bio.value }),
+        // })
+        //     .then((response) => response.json())
+        //     .then((updated) => {
+        //         console.log("bio:", typeof updated);
+        //         updateBio(updated);
+        //     });
     }
 
     return (

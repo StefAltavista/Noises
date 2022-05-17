@@ -28,7 +28,7 @@ export default function OtherAccount() {
             "mounting from use effect, mounting account n. :",
             otherUserId
         );
-    }, []);
+    }, [otherUserId]);
 
     return (
         <>

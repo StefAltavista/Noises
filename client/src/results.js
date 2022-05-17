@@ -1,17 +1,15 @@
-export default function Results(Results) {
-    const { allResults } = Results;
+export default function Results({ allResults }) {
     if (allResults) {
-        console.log(allResults);
+        console.log("from results com", allResults);
     }
 
     return (
         <>
             {allResults && (
                 <div id="allResults">
-                    hello
-                    {allResults.forEach((x) => {
+                    {allResults.map((x) => {
                         return (
-                            <div id="eachResult">
+                            <div id="eachResult" key={x.id}>
                                 <img src={x.imgurl} />
                                 <p>
                                     {x.name} {x.surname}
@@ -19,6 +17,11 @@ export default function Results(Results) {
                             </div>
                         );
                     })}
+                </div>
+            )}
+            {allResults && (
+                <div>
+                    <p>No Results</p>
                 </div>
             )}
         </>

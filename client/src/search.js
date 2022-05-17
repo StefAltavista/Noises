@@ -6,14 +6,13 @@ export default function Search({ myId, searchResults, toggleSearch }) {
     console.log(myId);
     useEffect(() => {
         let abort = false;
-        console.log("search", search);
+
         if (search) {
             fetch(`/api/search?s=${search}`)
                 .then((res) => {
                     return res.json();
                 })
                 .then(({ matches }) => {
-                    console.log("from db:", matches);
                     if (!abort) {
                         if (matches) {
                             setMatch(matches);
@@ -28,7 +27,6 @@ export default function Search({ myId, searchResults, toggleSearch }) {
         } else {
             setMatch(false);
         }
-        console.log("Match:", match);
 
         return () => {
             abort = true;
@@ -62,7 +60,9 @@ export default function Search({ myId, searchResults, toggleSearch }) {
                     })}
 
                     <p id="showMore">
-                        <Link to="/results">Show all results</Link>
+                        <Link to="/results" onClick={toggleSearch}>
+                            <p>Show all results</p>
+                        </Link>
                     </p>
                 </div>
             )}

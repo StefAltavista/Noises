@@ -56,19 +56,10 @@ export default class App extends Component {
                         </Route>
 
                         {/* route to other user profile page */}
-                        <Route
-                            exact
-                            path="/user/:otherUserId"
-                            render={(props) => (
-                                <OtherAccount
-                                    {...props}
-                                    key={props.match.url}
-                                />
-                            )}
-                        />
-                        {/* <Route path="/user/:otherUserId"> */}
-                        {/* <OtherAccount/>
-                        </Route> */}
+
+                        <Route path="/user/:otherUserId">
+                            <OtherAccount />
+                        </Route>
 
                         {/* route to search result page */}
                         <Route path="/results">

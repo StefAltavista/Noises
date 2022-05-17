@@ -19,17 +19,31 @@ test("Open textArea on edit bio click", () => {
 });
 
 test("Clicking on Save button causes an HTTP request", async () => {
-    const { container } = render(<MyAccount bio="text" />);
-    expect(container.querySelector("button").innerHTML).toBe("edit");
+    //const { container } = render(<MyAccount bio="text" />);
+    const { container } = render(<EditBio submit={jest.fn()} />);
+    expect(container.querySelector("button").innerHTML).toBe("update");
     fireEvent.click(container.querySelector("button"));
     expect(container.querySelector("textarea")).toBeTruthy();
     fireEvent.click(container.querySelector("#updateBioButton"));
+    fetch.mockResolvedValueOnce({
+        async json() {
+            return "";
+        },
+    });
     await waitFor(() => {
-        fetch.mockResolvedValueOnce({
-            async json() {
-                return "";
-            },
-        });
         expect(container.querySelector("biography").innerHTML).toBe("");
     });
 });
+// LET'S WRITE our first test:
+// remember test takes two arguments string + cb function
+// we don't actually want to make server requests for actual data, we need to mock our fetch return
+// test("app eventually renders a div", async()=>{
+// 	fetch.mockResolvedValue({
+//         async json() {
+//             return {
+// 						first: "Merle",
+// 						last: "Fischer",
+// 						url: "someUrl",
+// 						id: 1,
+// 	}
+// })

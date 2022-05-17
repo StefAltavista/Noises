@@ -1,4 +1,5 @@
 body {
+    box-sizing: border-box;
     background-color: rgb(22, 26, 31);
     color: white;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
@@ -42,10 +43,12 @@ nav #search {
 #search input {
     position: absolute;
     margin-left: 20px;
+    width: 150px;
 }
 #search #results {
-    width: auto;
-    height: 200px;
+    width: 150px;
+    min-height: 50px;
+    max-height: 200px;
     overflow: scroll;
     position: absolute;
     top: 65px;
@@ -166,4 +169,20 @@ nav #profPic {
     height: 150px;
     object-fit: fill;
     cursor: pointer;
+}
+
+#allResults {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#eachResult img {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    object-fit: cover;
 }

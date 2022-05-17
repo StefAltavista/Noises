@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 const spicedPg = require("spiced-pg");
 
 let db;
@@ -54,51 +55,6 @@ const queryUpdatePassword = (email, hash) => {
         hash,
     ]);
 };
-const add = (user_id, age, city, country, website) => {
-    return db.query(
-        `INSERT INTO userData (user_id, age, city, country, website)
-        VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (user_id)
-        DO UPDATE SET age=$2, city=$3, country=$4, website=$5 `,
-        [user_id, age, city, country, website]
-    );
-};
-
-const sign = (user_id, signature) => {
-    return db.query(
-        `INSERT INTO signatures (user_id, signature) VALUES ($1, $2) RETURNING id`,
-        [user_id, signature]
-    );
-};
-const deletesignature = (id) => {
-    return db.query(`DELETE FROM signatures WHERE user_id= $1`, [id]);
-};
-const update = (
-    user_id,
-    name,
-    surname,
-    age,
-    city,
-    country,
-    website,
-    email,
-    hash
-) => {
-    db.query(
-        `INSERT INTO users (id, name, surname, email, hash)
-    VALUES ($1, $2, $3, $4, $5)
-    ON CONFLICT (id)
-    DO UPDATE SET name=$2, surname=$3`,
-        [user_id, name, surname, email, hash]
-    );
-    return db.query(
-        `INSERT INTO userData (user_id, age, city, country, website)
-    VALUES ($1, $2, $3, $4, $5)
-    ON CONFLICT (user_id)
-    DO UPDATE SET age=$2, city=$3, country=$4, website=$5 `,
-        [user_id, age, city, country, website]
-    );
-};
 
 //UPDATE table_name SET column1 = value1 WHERE condition
 const insertImg = (imgUrl, id) => {
@@ -119,6 +75,39 @@ const search = (s) => {
         [s + "%"]
     );
 };
+
+const pendingReq = (id) => {
+    return db.query(
+        `SELECT * FROM friendships WHERE sender_id=$1 OR recipient_id=$1`,
+        [id]
+    );
+};
+const friendAction = (action, otherUserId, myId) => {
+    switch (action) {
+        case "unfriend":
+            return db
+                .query(`SELECT friends FROM users WHERE id=$1`, [myId])
+                .then(({ rows }) => {
+                    console.log("my Friends", rows);
+                    //find otherUserId in rows and slice it out
+                });
+        case "accept":
+            db.query(`SELECT friends FROM users WHERE id=$1`, [myId]).then(
+                (rows) => {
+                    console.log(rows);
+                    //push into myFriends -> otherUserId
+                }
+            );
+            return db.query(`UPDATE users (friends) VALUES ($1)`);
+
+        case "request":
+            return db.query(
+                `INSERT INTO friendship (sender_id, recipient_id) VALUES ($1,$2)`,
+                [myId, otherUserId]
+            );
+    }
+};
+
 module.exports = {
     querydb,
     queryByEmail,
@@ -130,9 +119,6 @@ module.exports = {
     insertImg,
     queryUpdateBio,
     search,
-    //olds
-    add,
-    sign,
-    deletesignature,
-    update,
+    pendingReq,
+    friendAction,
 };

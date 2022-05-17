@@ -10,7 +10,7 @@ const uidSafe = require("uid-safe");
 const db = require("./../database/db.js");
 const { sendCode } = require("./SES.js");
 const { checkRegistration } = require("./middleware.js");
-const { search } = require("./methods.js");
+const { search, pendingRequests, updateFriendship } = require("./methods.js");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("cryptingKey");
 app.use(
@@ -68,8 +68,29 @@ app.get("/user", async (req, res) => {
     res.json(currentUser);
 });
 
+app.get("/user/friends", async (req, res) => {
+    res.json({ friends: "23,45,67,78,90" });
+});
+
+app.get("/pending", async (req, res) => {
+    pendingRequests(req.session.userId).then(({ rows }) => {
+        res.json(rows);
+        console.log("PENDING REQUESTS:", rows);
+    });
+});
+app.put("/user/connect", async (req, res) => {
+    const { action, otherUserId } = req.body;
+    console.log(action);
+    updateFriendship(action, otherUserId, req.session.userId).then((x) => {
+        console.log(x);
+    });
+    // if (action === "request") {
+    //     res.json("Request Sent");
+    // }
+});
+
 app.post("/upload_profile_pic", uploader.single("file"), upload, (req, res) => {
-    console.log("\n\nPOST, req file filename \n", req.file.filename, "\n\n");
+    //console.log("\n\nPOST, req file filename \n", req.file.filename, "\n\n");
     let imgUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
     if (req.file) {
         db.insertImg(imgUrl, req.session.userId).then(({ rows }) => {
@@ -84,7 +105,6 @@ app.post("/upload_profile_pic", uploader.single("file"), upload, (req, res) => {
 
 app.post("/editbio", (req, res) => {
     user.updateBio(req.body.bio, req.session.userId).then(({ rows }) => {
-        console.log(rows);
         res.json(rows[0].bio);
     });
 });
@@ -157,7 +177,7 @@ app.get("/api/password", (req, res) => {
 
 app.put("/api/password", (req, res) => {
     const { email, newpassword } = req.body;
-    console.log("UPDATE", email, newpassword);
+
     user.passwordResetUpdate(email, newpassword)
         .then(() => res.json({ success: true }))
         .catch(() => {
@@ -166,16 +186,13 @@ app.put("/api/password", (req, res) => {
 });
 
 app.get("/api/search", (req, res) => {
-    console.log(req.query.s);
     search(req.query)
         .then(({ matches }) => {
-            console.log(matches);
             res.json({ matches });
         })
         .catch((e) => console.log("internal Server/Search error: \n", e));
 });
 app.post("/api/getuser", (req, res) => {
-    console.log("server getuser:", req.body);
     user.getUser(req.body.id).then((result) => {
         if (!result[0]) {
             console.log("nothing here!");
@@ -184,6 +201,11 @@ app.post("/api/getuser", (req, res) => {
         res.json(result);
         console.log(result);
     });
+});
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/");
 });
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

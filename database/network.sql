@@ -10,6 +10,7 @@ CREATE TABLE users(
      surname        VARCHAR,  
      imgUrl         VARCHAR, 
      bio            TEXT, 
+     friends        int[],
      created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
      
 );
