@@ -21,3 +21,9 @@ CREATE TABLE resetCode(
      email          VARCHAR NOT NULL,
      created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
+
+CREATE TABLE pending_requests(
+     id             SERIAL PRIMARY KEY,
+     sender_id      int,
+     recipient_id   int
+)

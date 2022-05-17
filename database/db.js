@@ -19,7 +19,6 @@ if (process.env.DATABASE_URL) {
 }
 
 //const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
-var where;
 
 const querydb = () => db.query(`SELECT * FROM users;`);
 
@@ -29,10 +28,10 @@ const queryByEmail = (email) => {
 
 const queryById = (id) =>
     db.query(`SELECT * FROM users WHERE users.id = $1`, [id]);
-const register = (email, hash, name, surname, imgUrl) => {
+const register = (email, hash, name, surname, imgUrl, friends) => {
     return db.query(
-        `INSERT INTO users (email,hash,name,surname, imgUrl) VALUES( $1 , $2, $3, $4, $5) RETURNING id`,
-        [email, hash, name, surname, imgUrl]
+        `INSERT INTO users (email,hash,name,surname, imgUrl,friends) VALUES( $1 , $2, $3, $4, $5, $6) RETURNING id`,
+        [email, hash, name, surname, imgUrl, friends]
     );
 };
 const newResetCode = (code, email) => {
@@ -75,38 +74,75 @@ const search = (s) => {
         [s + "%"]
     );
 };
-
+const getMyfriends = (id) => {
+    return db
+        .query(`SELECT friends FROM users WHERE users.id=($1);`, [id])
+        .then(({ rows }) => rows[0])
+        .catch((e) => {
+            console.log("Internal Server error: ", e);
+            return { e };
+        });
+};
 const pendingReq = (id) => {
     return db.query(
-        `SELECT * FROM friendships WHERE sender_id=$1 OR recipient_id=$1`,
+        `SELECT * FROM pending_requests WHERE sender_id=$1 OR recipient_id=$1`,
         [id]
     );
 };
-const friendAction = (action, otherUserId, myId) => {
-    switch (action) {
-        case "unfriend":
-            return db
-                .query(`SELECT friends FROM users WHERE id=$1`, [myId])
-                .then(({ rows }) => {
-                    console.log("my Friends", rows);
-                    //find otherUserId in rows and slice it out
-                });
-        case "accept":
-            db.query(`SELECT friends FROM users WHERE id=$1`, [myId]).then(
-                (rows) => {
-                    console.log(rows);
-                    //push into myFriends -> otherUserId
-                }
-            );
-            return db.query(`UPDATE users (friends) VALUES ($1)`);
-
-        case "request":
-            return db.query(
-                `INSERT INTO friendship (sender_id, recipient_id) VALUES ($1,$2)`,
-                [myId, otherUserId]
-            );
-    }
+const updatePendings = (otherUserId, myId) => {
+    return db.query(
+        `DELETE FROM pending_requests WHERE (sender_id=$1 AND recipient_id=$2) OR (sender_id=$1 AND recipient_id=$2)`,
+        [otherUserId, myId]
+    );
 };
+const addRequest = (otherUserId, myId) => {
+    return db
+        .query(
+            `INSERT INTO pending_requests (sender_id, recipient_id) VALUES ($1,$2) RETURNING *`,
+            [myId, otherUserId]
+        )
+        .then(({ rows }) => {
+            console.log("from Database, pendings updated: ", rows);
+            return "Request Sent";
+        });
+};
+
+const updateFriends = (friends, myId) => {
+    return db
+        .query(`UPDATE users SET friends = $1 WHERE id=$2 RETURNING friends`, [
+            friends,
+            myId,
+        ])
+        .then(({ rows }) => {
+            console.log("from db", rows[0]);
+            return rows[0];
+        });
+};
+
+// const friendAction = (action, otherUserId, myId) => {
+//     switch (action) {
+//         case "unfriend":
+//             return db
+//                 .query(`UPDATE users SET friends = $1 WHERE id=$2`, [
+//                     friends,
+//                     myId,
+//                 ])
+//                 .then(({ rows }) => rows);
+//         case "accept":
+//             db.query(`SELECT friends FROM users WHERE id=$1`, [myId]).then(
+//                 (rows) => rows
+//             );
+//             return db.query(`UPDATE users (friends) VALUES ($1)`);
+
+//         case "request":
+//             return db
+//                 .query(
+//                     `INSERT INTO pending_requests (sender_id, recipient_id) VALUES ($1,$2) RETURNING *`,
+//                     [myId, otherUserId]
+//                 )
+//                 .then(() => "Request Sent");
+//     }
+// };
 
 module.exports = {
     querydb,
@@ -119,6 +155,9 @@ module.exports = {
     insertImg,
     queryUpdateBio,
     search,
+    getMyfriends,
     pendingReq,
-    friendAction,
+    updatePendings,
+    updateFriends,
+    addRequest,
 };

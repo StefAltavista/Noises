@@ -4,6 +4,100 @@ import { useEffect, useState } from "react";
 export default function FriendButton({ otherUserId }) {
     const [buttonText, setButtonText] = useState();
 
+    // useEffect(() => {
+    //     fetch("/user/friends")
+    //         .then((res) => res.json())
+    //         .then((myFriends) => console.log("My friends:", myFriends));
+    // });
+    useEffect(() => {
+        (async function () {
+            let result = await fetch("/user/friends");
+            let friends = await result.json();
+            console.log("My friends:", friends);
+
+            let isFriend = friends.find((x) => x == +otherUserId);
+            console.log("search friend:", isFriend);
+
+            if (isFriend) {
+                console.log(isFriend, " is my friend!");
+                setButtonText("Unfriend");
+            } else {
+                console.log(otherUserId, " is not my friend yet");
+                let results = await fetch("/pending");
+                let myPending = await results.json();
+                console.log("my pending requests:", myPending);
+                if (myPending[0]) {
+                    console.log("my Pending Requests:", myPending);
+                    const otherUserSender = myPending.filter(
+                        (x) => x.sender_id == +otherUserId
+                    );
+                    const otherUserRecipient = myPending.filter(
+                        (x) => x.recipient_id == +otherUserId
+                    );
+                    if (otherUserSender[0]) {
+                        console.log(otherUserId, "sent me a request");
+                        setButtonText("Accept Friendship");
+                    } else if (otherUserRecipient[0]) {
+                        console.log(otherUserId, "received my request");
+                        setButtonText("Request Sent");
+                    } else {
+                        setButtonText("Request Friendship");
+                    }
+                } else {
+                    setButtonText("Request Friendship");
+                }
+            }
+        })();
+
+        // fetch("/user/friends")
+        //     .then((result) => result.json())
+        //     .then((friends) => {
+        //         console.log("My friends:", friends);
+
+        //         let isFriend = friends.find((x) => x == +otherUserId);
+        //         console.log(isFriend);
+
+        //         if (isFriend) {
+        //             console.log(isFriend, " is my friend!");
+        //             setButtonText("Unfriend");
+        //         } else {
+        //             console.log(otherUserId, " is not my friend yet");
+        //             fetch("/pending")
+        //                 .then((result) => result.json())
+        //                 .then((myPending) => {
+        //                     console.log("my pending requests:", myPending);
+        //                     if (myPending[0]) {
+        //                         console.log("my Pending Requests:", myPending);
+        //                         //check wether otheruserid is present in rows
+        //                         const otherUserSender = myPending.filter(
+        //                             (x) => x.sender_id == +otherUserId
+        //                         );
+        //                         const otherUserRecipient = myPending.filter(
+        //                             (x) => x.recipient_id == +otherUserId
+        //                         );
+        //                         if (otherUserSender[0]) {
+        //                             console.log(
+        //                                 otherUserId,
+        //                                 "sent me a request"
+        //                             );
+        //                             setButtonText("Accept Friendship");
+        //                         } else if (otherUserRecipient[0]) {
+        //                             console.log(
+        //                                 otherUserId,
+        //                                 "received my request"
+        //                             );
+        //                             setButtonText("Request Sent");
+        //                         } else {
+        //                             setButtonText("Request Friendship");
+        //                         }
+        //                     } else {
+        //                         setButtonText("Request Friendship");
+        //                     }
+        //                 });
+        //         }
+        //     });
+    }, [otherUserId]);
+
     const updateRelationship = () => {
         //fetch PUT friendship
         let reqBody = {};
@@ -40,46 +134,6 @@ export default function FriendButton({ otherUserId }) {
         }
     };
 
-    useEffect(() => {
-        fetch("/user/friends")
-            .then((result) => result.json())
-            .then(({ friends }) => {
-                //console.log(typeof friends);
-                let isFriend = friends.split(",").filter((x) => {
-                    x == otherUserId;
-                });
-                console.log(isFriend[0]);
-
-                if (isFriend[0]) {
-                    console.log(isFriend[0]);
-                    setButtonText("Unfriend");
-                } else {
-                    console.log("nofriend");
-                    fetch("/pending")
-                        .then((result) => result.json())
-                        .then(({ rows }) => {
-                            if (rows) {
-                                console.log("my Pending Requests:", rows);
-                                //check wether otheruserid is present in rows
-                                const otherUserSender = rows.filter((x) => {
-                                    x.sender_id == otherUserId;
-                                });
-                                if (otherUserSender[0]) {
-                                    setButtonText("Accept Friendship");
-                                }
-                                const otherUserRecipient = rows.filter((x) => {
-                                    x.recipient_id == otherUserId;
-                                });
-                                if (otherUserRecipient[0]) {
-                                    setButtonText("Request Sent");
-                                }
-                            } else {
-                                setButtonText("Request Friendship");
-                            }
-                        });
-                }
-            });
-    }, []);
     return (
         <>
             <button onClick={updateRelationship}>{buttonText}</button>

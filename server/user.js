@@ -12,7 +12,7 @@ const crypt = (p) => {
 const decrypt = (p, h) => bcrypt.compare(p, h);
 
 const signin = (req) => {
-    const { email, password, first, last, imgUrl } = req.body;
+    const { email, password, first, last, imgUrl, friends } = req.body;
     return db
         .querydb()
         .then(({ rows }) => {
@@ -24,7 +24,7 @@ const signin = (req) => {
 
             return crypt(password).then((hash) => {
                 return db
-                    .register(email, hash, first, last, imgUrl)
+                    .register(email, hash, first, last, imgUrl, friends)
                     .then(({ rows }) => {
                         var init = first.split("")[0] + last.split("")[0];
                         return { e: null, id: rows[0].id, init };

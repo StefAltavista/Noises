@@ -10,7 +10,12 @@ const uidSafe = require("uid-safe");
 const db = require("./../database/db.js");
 const { sendCode } = require("./SES.js");
 const { checkRegistration } = require("./middleware.js");
-const { search, pendingRequests, updateFriendship } = require("./methods.js");
+const {
+    search,
+    pendingRequests,
+    updateFriendship,
+    myfriends,
+} = require("./methods.js");
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("cryptingKey");
 app.use(
@@ -69,12 +74,23 @@ app.get("/user", async (req, res) => {
 });
 
 app.get("/user/friends", async (req, res) => {
-    res.json({ friends: "23,45,67,78,90" });
+    myfriends(req.session.userId).then(({ friends }) => {
+        console.log("Server get fr - myfriends:", friends);
+        if (!friends) {
+            res.json([]);
+        } else {
+            res.json(friends);
+        }
+    });
 });
 
 app.get("/pending", async (req, res) => {
     pendingRequests(req.session.userId).then(({ rows }) => {
-        res.json(rows);
+        if (!rows) {
+            res.json([]);
+        } else {
+            res.json(rows);
+        }
         console.log("PENDING REQUESTS:", rows);
     });
 });
@@ -82,11 +98,9 @@ app.put("/user/connect", async (req, res) => {
     const { action, otherUserId } = req.body;
     console.log(action);
     updateFriendship(action, otherUserId, req.session.userId).then((x) => {
-        console.log(x);
+        console.log("Server - updatefriendship:", x);
+        res.json(x);
     });
-    // if (action === "request") {
-    //     res.json("Request Sent");
-    // }
 });
 
 app.post("/upload_profile_pic", uploader.single("file"), upload, (req, res) => {
