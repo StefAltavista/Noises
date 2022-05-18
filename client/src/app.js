@@ -1,6 +1,7 @@
 import { Component } from "react";
 import Navigator from "./navigator.js";
 import MyAccount from "./myAccount.js";
+import MyFriends from "./myfriends.js";
 import OtherAccount from "./otherAccount.js";
 import Results from "./results.js";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -66,6 +67,10 @@ export default class App extends Component {
                             <Results
                                 allResults={this.state.searchResults}
                             ></Results>
+                        </Route>
+                        {/* route to MyFriends and requests */}
+                        <Route path="/myfriends">
+                            <MyFriends />
                         </Route>
                     </div>
                 </BrowserRouter>

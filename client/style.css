@@ -7,6 +7,14 @@ body {
     padding: 0;
     margin: 0;
 }
+a {
+    color: inherit;
+}
+button {
+    border: 0;
+    background-color: black;
+    color: whitesmoke;
+}
 .welcomebody {
     display: flex;
     flex-direction: row;
@@ -59,7 +67,7 @@ nav #search {
     flex-direction: column;
     justify-content: left;
 }
-#search #results li {
+li {
     list-style-type: none;
 }
 #search #results li #each {
@@ -185,4 +193,41 @@ nav #profPic {
     height: 100px;
     overflow: hidden;
     object-fit: cover;
+}
+
+#myfriendsPage {
+    display: flex;
+    flex-direction: column;
+}
+
+#MyFriends {
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+}
+#MyFriends #friend {
+    display: grid;
+    grid-template-rows: 1fr 0.5fr 0.3fr;
+    margin: 10px;
+    padding: 20px;
+    box-shadow: inset 0 0 10px #000000;
+}
+
+#MyFriends #friend img {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+#MyFriends #friend p {
+    font-size: 12px;
+    margin: auto auto;
+}
+#MyFriends #friend button {
+    font-size: 12px;
+    width: 70px;
+    height: 20px;
+    margin-left: 35px;
+    margin-right: 35px;
 }

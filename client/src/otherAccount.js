@@ -14,11 +14,11 @@ export default function OtherAccount() {
         })
             .then((response) => response.json())
             .then((user) => {
-                if (user[0].nomatch) {
+                if (user.nomatch) {
                     setNomatch(true);
                 } else {
-                    console.log("other user:", user[0]);
-                    setOtherUser(user[0]);
+                    console.log("other user:", user);
+                    setOtherUser(user);
                 }
             })
             .then(() => {

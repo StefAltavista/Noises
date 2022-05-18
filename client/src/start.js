@@ -9,10 +9,10 @@ import { Provider } from "react-redux";
 import reducer from "./redux/reducer.js";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import immutableState from "redux-immutable-state-invariant";
+import * as immutableState from "redux-immutable-state-invariant";
 const store = createStore(
-    reducer
-    //composeWithDevTools(applyMiddleware(immutableState.default()))
+    reducer,
+    composeWithDevTools(applyMiddleware(immutableState.default()))
 );
 
 //create store is deprecated,

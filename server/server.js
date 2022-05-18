@@ -207,13 +207,13 @@ app.get("/api/search", (req, res) => {
         .catch((e) => console.log("internal Server/Search error: \n", e));
 });
 app.post("/api/getuser", (req, res) => {
+    console.log(req.body);
     user.getUser(req.body.id).then((result) => {
         if (!result[0]) {
             console.log("nothing here!");
             result[0] = { nomatch: true };
         }
-        res.json(result);
-        console.log(result);
+        res.json(result[0]);
     });
 });
 
