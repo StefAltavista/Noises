@@ -5,6 +5,19 @@ import ReactDOM from "react-dom";
 import Welcome from "./welcome.js";
 import UpdatePs from "./updateps.js";
 import App from "./app.js";
+import { Provider } from "react-redux";
+import reducer from "./redux/reducer.js";
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import immutableState from "redux-immutable-state-invariant";
+const store = createStore(
+    reducer
+    //composeWithDevTools(applyMiddleware(immutableState.default()))
+);
+
+//create store is deprecated,
+// import { configureStore } from "redux";
+// const store = configureStore();
 
 (async function () {
     const verification = await fetch("/user/verification");
@@ -21,7 +34,12 @@ import App from "./app.js";
         if (!idData.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
-            ReactDOM.render(<App />, document.querySelector("main"));
+            ReactDOM.render(
+                <Provider store={store}>
+                    <App />
+                </Provider>,
+                document.querySelector("main")
+            );
         }
     }
 })();
