@@ -16,6 +16,7 @@ export default class Registration extends Component {
                 email: e.target[2].value,
                 password: e.target[3].value,
                 imgUrl: "/defaultUserImg.png",
+                friends: [],
             },
             () => {
                 fetch("/register", {
