@@ -42,7 +42,7 @@ export default function MyRequests() {
 
     return (
         <div>
-            <p>in req</p>
+            <p>Pending Requests</p>
             {requests && (
                 <ul id="MyFriends">
                     {requests.map((user) => {

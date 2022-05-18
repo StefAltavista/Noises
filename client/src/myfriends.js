@@ -35,6 +35,7 @@ export default function MyFriends() {
 
     return (
         <div id="myfriendsPage">
+            <p>Friends</p>
             {friends && (
                 <ul id="MyFriends">
                     {friends.map((friend) => {
@@ -44,15 +45,13 @@ export default function MyFriends() {
                                 <p>
                                     {friend.name} {friend.surname}
                                 </p>
-                                <button>Unfriend</button>
+                                <button>Remove</button>
                             </li>
                         );
                     })}
                 </ul>
             )}
             <div id="requests">
-                {" "}
-                <p>REQUESTS</p>
                 <MyRequests />
             </div>
         </div>
