@@ -6,8 +6,6 @@ const rootReducer = combineReducers({
     account: setAccountReducer,
     friends: friendsReducer,
     requests: requestReducer,
-
-    //messagesReducer: later...
 });
 
 export default rootReducer;

@@ -20,7 +20,7 @@ export default function MyRequests() {
     (async function () {
         const userData = await fetch("/user");
         const user = await userData.json();
-        myId = user[0].id;
+        myId = user.id;
     })();
 
     function accept(id) {

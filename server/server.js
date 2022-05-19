@@ -71,7 +71,7 @@ app.get("/user/clearVerification", (req, res) => {
 
 app.get("/user", async (req, res) => {
     const currentUser = await user.getUser(req.session.userId);
-    res.json(currentUser);
+    res.json(currentUser[0]);
 });
 app.post("/api/getuser", (req, res) => {
     console.log(req.body);

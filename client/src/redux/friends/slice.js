@@ -1,9 +1,10 @@
 export function friendsReducer(friends = [], action) {
     if (action.type == "GET_MY_FRIENDS") {
-        friends = [action.payload.friend, ...friends];
+        console.log(action.payload.friends);
+        friends = [...action.payload.friends, ...friends];
     }
     if (action.type == "ACCEPT_FRIEND") {
-        friends = [action.payload.friend, ...friends];
+        friends = [...action.payload.friend, ...friends];
     }
     if (action.type == "UNFRIEND") {
         let idx = friends.findIndex((friend) => {
@@ -17,10 +18,10 @@ export function friendsReducer(friends = [], action) {
     return friends;
 }
 
-export function getMyFriends(friend) {
+export function getMyFriends(friends) {
     return {
         type: "GET_MY_FRIENDS",
-        payload: { friend },
+        payload: { friends },
     };
 }
 export function acceptFriend(friend) {

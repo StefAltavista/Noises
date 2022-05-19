@@ -21,23 +21,33 @@ export default function MyFriends() {
         }).then(() => dispatch(unfriend(id)));
     }
 
+    // fetch("/user/friends")
+    //     .then((res) => res.json())
+    //     .then((friends) =>
+    //         Promise.all(
+    //             friends.map((id) =>
+    //                 fetch(`user/${id}`).then((res) => res.json())
+    //             )
+    //         ).then((friendData) => dispatch(getMyFriends(friendData)))
+    //     );
+
     useEffect(() => {
         fetch("/user/friends")
             .then((res) => res.json())
-            .then((friends) => {
-                friends.map((id) => {
-                    fetch("/api/getuser", {
+            .then((friends_ids) => {
+                const friendDataPromise = friends_ids.map((id) => {
+                    return fetch("/api/getuser", {
                         headers: { "content-type": "application/json" },
                         method: "POST",
                         body: JSON.stringify({ id }),
-                    })
-                        .then((res) => res.json())
-                        .then((friend) => {
-                            if (friend.nomatch) {
-                                return;
-                            }
-                            dispatch(getMyFriends(friend));
-                        });
+                    }).then((res) => res.json());
+                });
+                return friendDataPromise;
+            })
+            .then((promises) => {
+                Promise.all(promises).then((friendsData) => {
+                    console.log("friendsData", friendsData);
+                    dispatch(getMyFriends(friendsData));
                 });
             });
     }, []);
