@@ -13,6 +13,7 @@ const { checkRegistration } = require("./middleware.js");
 const {
     search,
     pendingRequests,
+    updatePendings,
     updateFriendship,
     myfriends,
 } = require("./methods.js");
@@ -72,7 +73,16 @@ app.get("/user", async (req, res) => {
     const currentUser = await user.getUser(req.session.userId);
     res.json(currentUser);
 });
-
+app.post("/api/getuser", (req, res) => {
+    console.log(req.body);
+    user.getUser(req.body.id).then((result) => {
+        if (!result[0]) {
+            console.log("nothing here!");
+            result[0] = { nomatch: true };
+        }
+        res.json(result[0]);
+    });
+});
 app.get("/user/friends", async (req, res) => {
     myfriends(req.session.userId).then(({ friends }) => {
         console.log("Server get fr - myfriends:", friends);
@@ -93,6 +103,13 @@ app.get("/pending", async (req, res) => {
         }
         console.log("PENDING REQUESTS:", rows);
     });
+});
+
+app.put("/pending", async (req, res) => {
+    const { otherUserId } = req.body;
+    updatePendings(otherUserId, req.session.userId).then((rows) =>
+        res.json(rows)
+    );
 });
 app.put("/user/connect", async (req, res) => {
     const { action, otherUserId } = req.body;
@@ -205,16 +222,6 @@ app.get("/api/search", (req, res) => {
             res.json({ matches });
         })
         .catch((e) => console.log("internal Server/Search error: \n", e));
-});
-app.post("/api/getuser", (req, res) => {
-    console.log(req.body);
-    user.getUser(req.body.id).then((result) => {
-        if (!result[0]) {
-            console.log("nothing here!");
-            result[0] = { nomatch: true };
-        }
-        res.json(result[0]);
-    });
 });
 
 app.get("/logout", (req, res) => {

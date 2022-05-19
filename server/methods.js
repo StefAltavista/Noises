@@ -33,10 +33,21 @@ const pendingRequests = (id) => {
             console.log("internal Dabase Search error: \n", e);
         });
 };
+const updatePendings = (otherUserId, myId) => {
+    return db.deleteRequest(otherUserId, myId).then(({ rows }) => rows);
+};
 
 const updateFriendship = (action, otherUserId, myId) => {
     switch (action) {
         case "unfriend":
+            db.getMyfriends(otherUserId).then(({ friends }) => {
+                const idx = friends.indexOf(+myId);
+                friends.splice(idx, 1);
+                console.log("their friends after splice:", friends);
+                db.updateFriends(friends, otherUserId).then((newfriends) =>
+                    console.log("other user friends updated:", newfriends)
+                );
+            });
             return db.getMyfriends(myId).then(({ friends }) => {
                 const idx = friends.indexOf(+otherUserId);
                 friends.splice(idx, 1);
@@ -49,7 +60,7 @@ const updateFriendship = (action, otherUserId, myId) => {
             return (async function (myId, otherUserId) {
                 let theirFriends = await db.getMyfriends(otherUserId);
                 theirFriends = theirFriends.friends;
-                if (!theirFriends[0]) {
+                if (!theirFriends) {
                     theirFriends = [];
                 }
                 console.log("methods:", theirFriends);
@@ -67,7 +78,7 @@ const updateFriendship = (action, otherUserId, myId) => {
                     friends.push(otherUserId);
                     console.log("friends after push:", friends);
                     return db.updateFriends(friends, myId).then(() => {
-                        db.updatePendings(otherUserId, myId);
+                        db.deleteRequest(otherUserId, myId);
                         return "Unfriend";
                     });
                 });
@@ -90,6 +101,7 @@ const updateFriendship = (action, otherUserId, myId) => {
 module.exports = {
     search,
     pendingRequests,
+    updatePendings,
     updateFriendship,
     myfriends,
 };

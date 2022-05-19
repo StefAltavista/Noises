@@ -2,10 +2,16 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 
-import { getMyRequests } from "./redux/requests/slice.js";
+import {
+    getMyRequests,
+    acceptRequest,
+    rejectRequest,
+} from "./redux/requests/slice.js";
+import { acceptFriend, getMyFriends } from "./redux/friends/slice.js";
 
 export default function MyRequests() {
     let myId;
+
     const dispatch = useDispatch();
     const requests = useSelector((state) => {
         return state.requests;
@@ -15,6 +21,45 @@ export default function MyRequests() {
         const user = await userData.json();
         myId = user[0].id;
     })();
+
+    function accept(id) {
+        dispatch(acceptRequest(id));
+
+        //fetch add friend
+        fetch("/user/connect", {
+            headers: { "content-type": "application/json" },
+            method: "PUT",
+            body: JSON.stringify({ action: "accept", otherUserId: id }),
+        })
+            .then((user) => user.json())
+            .then((friend) => {
+                console.log("fetch connect:", friend);
+            });
+        fetch("/api/getuser", {
+            headers: { "content-type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({ id }),
+        })
+            .then((user) => user.json())
+            .then((newfriend) => {
+                console.log("New friend: ", newfriend);
+                dispatch(acceptFriend(newfriend));
+            });
+    }
+
+    function reject(id) {
+        dispatch(rejectRequest(id));
+        fetch("/pending", {
+            headers: { "content-type": "application/json" },
+            method: "PUT",
+            body: JSON.stringify({ id }),
+        })
+            .then((res) => res.json())
+            .then((result) =>
+                console.log(`${result} pending request, deleted`)
+            );
+    }
+
     useEffect(() => {
         fetch("/pending")
             .then((res) => res.json())
@@ -33,7 +78,7 @@ export default function MyRequests() {
                             if (user.nomatch) {
                                 return;
                             }
-                            console.log("user", user);
+
                             dispatch(getMyRequests(user));
                         });
                 });
@@ -52,7 +97,12 @@ export default function MyRequests() {
                                 <p>
                                     {user.name} {user.surname}
                                 </p>
-                                <button>Accept</button>
+                                <button onClick={() => accept(user.id)}>
+                                    Accept
+                                </button>
+                                <button onClick={() => reject(user.id)}>
+                                    Reject
+                                </button>
                             </li>
                         );
                     })}

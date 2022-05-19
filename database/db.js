@@ -89,7 +89,7 @@ const pendingReq = (id) => {
         [id]
     );
 };
-const updatePendings = (otherUserId, myId) => {
+const deleteRequest = (otherUserId, myId) => {
     return db.query(
         `DELETE FROM pending_requests WHERE (sender_id=$1 AND recipient_id=$2) OR (sender_id=$1 AND recipient_id=$2)`,
         [otherUserId, myId]
@@ -107,11 +107,11 @@ const addRequest = (otherUserId, myId) => {
         });
 };
 
-const updateFriends = (friends, myId) => {
+const updateFriends = (friends, id) => {
     return db
         .query(`UPDATE users SET friends = $1 WHERE id=$2 RETURNING friends`, [
             friends,
-            myId,
+            id,
         ])
         .then(({ rows }) => {
             console.log("from db", rows[0]);
@@ -157,7 +157,7 @@ module.exports = {
     search,
     getMyfriends,
     pendingReq,
-    updatePendings,
-    updateFriends,
     addRequest,
+    deleteRequest,
+    updateFriends,
 };

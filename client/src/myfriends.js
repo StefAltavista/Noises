@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 //import Action Creator
-import { getMyFriends } from "./redux/friends/slice.js";
+import { getMyFriends, unfriend } from "./redux/friends/slice.js";
 //import component MyRequests
 import MyRequests from "./myrequests.js";
 
@@ -11,6 +11,14 @@ export default function MyFriends() {
     const friends = useSelector((state) => {
         return state.friends;
     });
+
+    function remove(id) {
+        fetch("/user/connect", {
+            headers: { "content-type": "application/json" },
+            method: "PUT",
+            body: JSON.stringify({ action: "unfriend", otherUserId: id }),
+        }).then(() => dispatch(unfriend(id)));
+    }
 
     useEffect(() => {
         fetch("/user/friends")
@@ -45,7 +53,9 @@ export default function MyFriends() {
                                 <p>
                                     {friend.name} {friend.surname}
                                 </p>
-                                <button>Remove</button>
+                                <button onClick={() => remove(friend.id)}>
+                                    Remove
+                                </button>
                             </li>
                         );
                     })}
