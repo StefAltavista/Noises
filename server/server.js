@@ -106,7 +106,7 @@ app.get("/pending", async (req, res) => {
 });
 
 app.put("/pending", async (req, res) => {
-    const { otherUserId } = req.body;
+    const otherUserId = req.body.id;
     updatePendings(otherUserId, req.session.userId).then((rows) =>
         res.json(rows)
     );

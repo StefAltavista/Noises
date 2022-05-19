@@ -9,7 +9,7 @@ export default function SettingsMenu({ settingsMenu }) {
             <p onClick={settingsMenu}>X</p>
             <ul>
                 <li>
-                    <Link to="/">My Account</Link>
+                    <Link to="/me">My Account</Link>
                 </li>
                 <li>
                     <a onClick={logout}>Log Out</a>

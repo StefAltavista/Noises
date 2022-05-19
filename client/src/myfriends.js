@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 //import Action Creator
 import { getMyFriends, unfriend } from "./redux/friends/slice.js";
 //import component MyRequests
@@ -48,14 +49,20 @@ export default function MyFriends() {
                 <ul id="MyFriends">
                     {friends.map((friend) => {
                         return (
-                            <li id="friend" key={friend.id}>
-                                <img src={friend.imgurl} />
-                                <p>
-                                    {friend.name} {friend.surname}
-                                </p>
-                                <button onClick={() => remove(friend.id)}>
-                                    Remove
-                                </button>
+                            <li key={friend.id}>
+                                <Link to={`/user/${friend.id}`}>
+                                    <div id="friend">
+                                        <img src={friend.imgurl} />
+                                        <p>
+                                            {friend.name} {friend.surname}
+                                        </p>
+                                        <button
+                                            onClick={() => remove(friend.id)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                </Link>
                             </li>
                         );
                     })}

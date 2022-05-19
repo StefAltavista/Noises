@@ -34,7 +34,9 @@ const pendingRequests = (id) => {
         });
 };
 const updatePendings = (otherUserId, myId) => {
-    return db.deleteRequest(otherUserId, myId).then(({ rows }) => rows);
+    return db.deleteRequest(otherUserId, myId).then(({ rows }) => {
+        return rows[0] ? "request deleted" : "request not found";
+    });
 };
 
 const updateFriendship = (action, otherUserId, myId) => {

@@ -1,9 +1,12 @@
 import { combineReducers } from "redux";
 import { friendsReducer } from "./friends/slice.js";
 import { requestReducer } from "./requests/slice.js";
+import { setAccountReducer } from "./setMe/slice.js";
 const rootReducer = combineReducers({
+    account: setAccountReducer,
     friends: friendsReducer,
     requests: requestReducer,
+
     //messagesReducer: later...
 });
 

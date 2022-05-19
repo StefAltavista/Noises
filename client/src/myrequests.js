@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 import {
     getMyRequests,
     acceptRequest,
     rejectRequest,
 } from "./redux/requests/slice.js";
-import { acceptFriend, getMyFriends } from "./redux/friends/slice.js";
+import { acceptFriend } from "./redux/friends/slice.js";
 
 export default function MyRequests() {
     let myId;
@@ -55,9 +56,7 @@ export default function MyRequests() {
             body: JSON.stringify({ id }),
         })
             .then((res) => res.json())
-            .then((result) =>
-                console.log(`${result} pending request, deleted`)
-            );
+            .then((result) => console.log(result));
     }
 
     useEffect(() => {
@@ -92,17 +91,21 @@ export default function MyRequests() {
                 <ul id="MyFriends">
                     {requests.map((user) => {
                         return (
-                            <li id="friend" key={user.id}>
-                                <img src={user.imgurl} />
-                                <p>
-                                    {user.name} {user.surname}
-                                </p>
-                                <button onClick={() => accept(user.id)}>
-                                    Accept
-                                </button>
-                                <button onClick={() => reject(user.id)}>
-                                    Reject
-                                </button>
+                            <li key={user.id}>
+                                <div id="friend">
+                                    <Link to={`/user/${user.id}`}>
+                                        <img src={user.imgurl} />
+                                        <p>
+                                            {user.name} {user.surname}
+                                        </p>
+                                        <button onClick={() => accept(user.id)}>
+                                            Accept
+                                        </button>
+                                        <button onClick={() => reject(user.id)}>
+                                            Reject
+                                        </button>
+                                    </Link>
+                                </div>
                             </li>
                         );
                     })}

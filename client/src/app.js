@@ -5,11 +5,20 @@ import MyFriends from "./myfriends.js";
 import OtherAccount from "./otherAccount.js";
 import Results from "./results.js";
 import { BrowserRouter, Route } from "react-router-dom";
+import { connect } from "react-redux";
+import { setAccount } from "./redux/setMe/slice.js";
 
-export default class App extends Component {
+class App extends Component {
     constructor() {
         super();
-        this.state = { name: "", surname: "", bio: "", email: "", imgurl: "" };
+        this.state = {
+            id: "",
+            name: "",
+            surname: "",
+            bio: "",
+            email: "",
+            imgurl: "",
+        };
         this.update = this.update.bind(this);
         this.searchResults = this.searchResults.bind(this);
     }
@@ -17,8 +26,11 @@ export default class App extends Component {
     async componentDidMount() {
         const userData = await fetch("/user");
         const user = await userData.json();
-        console.log("Me:", user[0]);
-        this.setState(user[0]);
+        //console.log("Me:", user[0]);
+        this.setState(user[0], () => {
+            console.log("callback setState:", this.state);
+            this.props.setMeUp(this.state);
+        });
     }
     update(newValues) {
         console.log("update app with:", newValues);
@@ -34,6 +46,7 @@ export default class App extends Component {
     render() {
         return (
             <div>
+                {console.log(this.props)}
                 <BrowserRouter>
                     <div>
                         <Navigator
@@ -46,7 +59,7 @@ export default class App extends Component {
                         ></Navigator>
 
                         {/* route to my profile page */}
-                        <Route exact path="/">
+                        <Route exact path="/me">
                             <MyAccount
                                 name={this.state.name}
                                 surname={this.state.surname}
@@ -72,9 +85,26 @@ export default class App extends Component {
                         <Route path="/myfriends">
                             <MyFriends />
                         </Route>
+
+                        <Route path="/">
+                            <h1>dashboard</h1>
+                        </Route>
                     </div>
                 </BrowserRouter>
             </div>
         );
     }
 }
+
+const mapStateToProps = () => {
+    return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setMeUp: (state) => {
+            dispatch(setAccount(state));
+        },
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(App);
