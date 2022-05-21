@@ -1,5 +1,7 @@
 //get the DOM
 import ReactDOM from "react-dom";
+//initialize socket.io if logged in
+import { init } from "./socketInit.js";
 
 //components
 import Welcome from "./welcome.js";
@@ -34,6 +36,7 @@ const store = createStore(
         if (!idData.userId) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
+            init();
             const app = (
                 <Provider store={store}>
                     <App />

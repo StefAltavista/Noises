@@ -1,12 +1,51 @@
+//SERVER setup
+
+//express
 const express = require("express");
 const app = express();
-const compression = require("compression");
-const path = require("path");
-const user = require("./user.js");
+
+///socket.io
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+
+//set up cookies in express.app & socket.io
 const cookieSession = require("cookie-session");
+const cookieSessionMiddleware = cookieSession({
+    secret: `MaskingTheCookieWithThisString`,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+});
+app.use(cookieSessionMiddleware);
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
+// set up multer
 const multer = require("multer");
 const { upload } = require("./s3");
 const uidSafe = require("uid-safe");
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, path.join(__dirname, "uploads")); // null (if no err!)
+    },
+    filename: (req, file, callback) => {
+        uidSafe(24).then((randomId) => {
+            const fileName = `${randomId}${path.extname(file.originalname)}`; // null (if no err!)
+            callback(null, fileName);
+        });
+    },
+});
+const uploader = multer({ storage });
+app.use(express.urlencoded({ extended: false }));
+
+//encrypting library
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("cryptingKey");
+
+//my libraries
+const user = require("./user.js");
 const db = require("./../database/db.js");
 const { sendCode } = require("./SES.js");
 const { checkRegistration } = require("./middleware.js");
@@ -16,36 +55,15 @@ const {
     updatePendings,
     updateFriendship,
     myfriends,
+    getMessages,
+    postMessage,
 } = require("./methods.js");
-const Cryptr = require("cryptr");
-const cryptr = new Cryptr("cryptingKey");
-app.use(
-    cookieSession({
-        secret: `MaskingTheCookieWithThisString`,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
 
-// multer --> lookup documentation
-
-const storage = multer.diskStorage({
-    // specify directory folder for temp uploads
-    destination: (req, file, callback) => {
-        callback(null, path.join(__dirname, "uploads")); // null (if no err!)
-    },
-    // specify filename
-    filename: (req, file, callback) => {
-        uidSafe(24).then((randomId) => {
-            const fileName = `${randomId}${path.extname(file.originalname)}`; // null (if no err!)
-            callback(null, fileName);
-        });
-    },
-});
-const uploader = multer({ storage });
-
-app.use(express.urlencoded({ extended: false }));
-
-//compressing the response .
+//middlewares and helpers
+const chalk = require("chalk");
+const path = require("path");
+//compressing the response
+const compression = require("compression");
 app.use(compression());
 //use json middleware for every request
 app.use(express.json());
@@ -232,6 +250,45 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
+io.on("connection", function (socket) {
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    const userId = socket.request.session.userId;
+    console.log(
+        chalk.black.bgGreen.bold(
+            `USER: ${userId} CONNECTED on socket ${socket.id}`
+        )
+    );
+    socket.on("disconnect", function () {
+        console.log(
+            chalk.black.bgRed.bold(
+                `USER: ${userId} DISCONNECTED socket ${socket.id}`
+            )
+        );
+    });
+    socket.on("GET_MESSAGES", async function () {
+        const messages = await getMessages();
+        socket.emit("MESSAGES", messages);
+    });
+
+    socket.on("sendMessage", async function (data) {
+        const { message } = data;
+        //get user data
+        const newMessage = await postMessage(
+            message.sender_id,
+            message.text
+        ).then((rows) => {
+            return rows[0];
+        });
+        io.emit("newMessage", {
+            message: newMessage,
+        });
+    });
+});
+
+//share the server between express and socket.io
+server.listen(process.env.PORT || 3001, function () {
     console.log("on 3001");
 });

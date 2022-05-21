@@ -4,6 +4,7 @@ import MyAccount from "./myAccount.js";
 import MyFriends from "./myfriends.js";
 import OtherAccount from "./otherAccount.js";
 import Results from "./results.js";
+import NoisesPool from "./groupChat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAccount } from "./redux/setMe/slice.js";
@@ -72,6 +73,9 @@ class App extends Component {
 
                             <Route path="/user/:otherUserId">
                                 <OtherAccount />
+                            </Route>
+                            <Route path="/pool">
+                                <NoisesPool />
                             </Route>
 
                             {/* route to search result page */}

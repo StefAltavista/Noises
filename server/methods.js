@@ -100,10 +100,19 @@ const updateFriendship = (action, otherUserId, myId) => {
             return { e };
         });
 };
+const getMessages = () => {
+    return db.messages().then(({ rows }) => rows);
+};
+const postMessage = (sender_id, text) => {
+    return db.addMessage(sender_id, text).then(({ rows }) => rows);
+};
+
 module.exports = {
     search,
     pendingRequests,
     updatePendings,
     updateFriendship,
     myfriends,
+    getMessages,
+    postMessage,
 };

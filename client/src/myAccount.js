@@ -1,5 +1,4 @@
 import { Component } from "react";
-
 import ImgModal from "./imgModal.js";
 import EditBio from "./editbio.js";
 

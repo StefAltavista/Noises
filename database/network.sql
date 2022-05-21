@@ -27,3 +27,9 @@ CREATE TABLE pending_requests(
      sender_id      int,
      recipient_id   int
 )
+
+CREATE TABLE messages(
+     id             SERIAL PRIMARY KEY,
+     sender_id      int,
+     text           VARCHAR
+)
