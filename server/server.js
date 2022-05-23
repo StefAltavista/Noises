@@ -257,6 +257,16 @@ app.post("/addNewEvent", (req, res) => {
     console.log(req.body);
     db.addNewEvent(req.body).then((event) => res.json(event));
 });
+app.post("/event", (req, res) => {
+    console.log(req.body.id);
+    db.getEvent(req.body.id).then(({ rows }) => {
+        console.log("get single event", rows);
+        res.json(rows[0]);
+    });
+});
+app.get("/allEvents", (req, res) => {
+    db.getAllEvents().then(({ rows }) => res.json(rows));
+});
 
 app.get("/logout", (req, res) => {
     req.session = null;

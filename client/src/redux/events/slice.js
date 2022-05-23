@@ -6,6 +6,13 @@ export function eventsReducer(events = [], action) {
     return events;
 }
 
+export function getAllEvent(event) {
+    return {
+        type: "GET_ALL_EVENTS",
+        payload: { event },
+    };
+}
+
 export function addEvent(event) {
     return {
         type: "ADD_EVENT",

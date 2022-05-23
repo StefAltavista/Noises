@@ -154,7 +154,17 @@ const addNewEvent = ({
     collaborators,
 }) => {
     return db.query(
-        `INSERT INTO events (creator, evt_name, startDate, startTime, endDate, endTime, evt_location, poster, evt_description, collaborators) 
+        `INSERT INTO events (
+            creator,
+            evt_name,
+            start_date,
+            start_time,
+            end_date,
+            end_time,
+            evt_location,
+            poster,
+            evt_description,
+            collaborators )
     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
         [
             id,
@@ -169,6 +179,12 @@ const addNewEvent = ({
             collaborators,
         ]
     );
+};
+const getEvent = (id) => {
+    return db.query(`SELECT * FROM events WHERE events.id=$1`, [id]);
+};
+const getAllEvents = () => {
+    return db.query(`SELECT * FROM events ORDER BY created_at ASC`);
 };
 module.exports = {
     querydb,
@@ -190,4 +206,6 @@ module.exports = {
     addMessage,
     lastUsers,
     addNewEvent,
+    getEvent,
+    getAllEvents,
 };

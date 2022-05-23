@@ -38,14 +38,15 @@ CREATE TABLE events(
      id                  SERIAL PRIMARY KEY,
      creator             int,
      evt_name            VARCHAR,
-     startDate           DATE,
-     startTime           TIME,
-     endDate             DATE,
-     endTime             TIME,
+     start_date           DATE,
+     start_time           TIME,
+     end_date             DATE,
+     end_time             TIME,
      evt_location        VARCHAR,
      poster              VARCHAR,
      evt_description     VARCHAR,
-     collaborators       VARCHAR
+     collaborators       VARCHAR,
+     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 )
 

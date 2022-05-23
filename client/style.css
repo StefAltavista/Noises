@@ -417,7 +417,7 @@ aside {
     display: grid;
     grid-template-columns: 1fr 1fr;
 
-    grid-auto-rows: minmax(500px, auto);
+    grid-auto-rows: minmax(700px, auto);
     padding: 50px;
 }
 #eventEditor {
@@ -450,6 +450,7 @@ form input {
     width: 100px;
     height: 30px;
     margin-top: 20px;
+    margin-right: 20px;
     align-self: start;
 }
 
@@ -484,4 +485,18 @@ form input {
 #eventInfo * {
     margin-left: 20px;
     margin-right: 20px;
+}
+#event {
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#eventPoster {
+    width: 3500px;
+    height: 500px;
+    object-fit: scale-down;
 }
