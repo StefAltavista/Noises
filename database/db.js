@@ -134,6 +134,42 @@ const addMessage = async (sender_id, text) => {
         [rows[0].id]
     );
 };
+
+const lastUsers = () => {
+    return db.query(
+        `SELECT name, surname, imgUrl FROM users ORDER BY users.id DESC  LIMIT 5 `
+    );
+};
+
+const addNewEvent = ({
+    id,
+    name,
+    startDate,
+    startTime,
+    endDate,
+    endTime,
+    location,
+    poster,
+    description,
+    collaborators,
+}) => {
+    return db.query(
+        `INSERT INTO events (creator, evt_name, startDate, startTime, endDate, endTime, evt_location, poster, evt_description, collaborators) 
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+        [
+            id,
+            name,
+            startDate,
+            startTime,
+            endDate,
+            endTime,
+            location,
+            poster,
+            description,
+            collaborators,
+        ]
+    );
+};
 module.exports = {
     querydb,
     queryByEmail,
@@ -152,4 +188,6 @@ module.exports = {
     updateFriends,
     messages,
     addMessage,
+    lastUsers,
+    addNewEvent,
 };

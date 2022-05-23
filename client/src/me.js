@@ -1,16 +1,24 @@
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+
 export default function Me() {
+    const me = useSelector((state) => state.account);
+    useEffect(() => {
+        console.log(me);
+    }, []);
+
     return (
         <>
-            <div id="user">
-                <img
-                    src={this.props.imgurl}
-                    onClick={this.settingsMenu}
-                    id="profPic"
-                />
-                <p>
-                    {this.props.name} {this.props.surname[0]}.
-                </p>
-            </div>
+            <Link to="/me">
+                {" "}
+                <div id="me">
+                    <img src={me.imgurl} id="profPic" />
+                    <p>
+                        {me.name} {me.surname}
+                    </p>
+                </div>
+            </Link>
         </>
     );
 }

@@ -242,6 +242,22 @@ app.get("/api/search", (req, res) => {
         .catch((e) => console.log("internal Server/Search error: \n", e));
 });
 
+app.post(
+    "/upload_event_poster",
+    uploader.single("file"),
+    upload,
+    (req, res) => {
+        //console.log("\n\nPOST, req file filename \n", req.file.filename, "\n\n");
+        let imgUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
+        res.json(imgUrl);
+    }
+);
+app.post("/addNewEvent", (req, res) => {
+    req.body = { id: req.session.userId, ...req.body };
+    console.log(req.body);
+    db.addNewEvent(req.body).then((event) => res.json(event));
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");
@@ -271,6 +287,10 @@ io.on("connection", function (socket) {
     socket.on("GET_MESSAGES", async function () {
         const messages = await getMessages();
         socket.emit("MESSAGES", messages);
+    });
+    socket.on("GET_LAST_USERS", async function () {
+        const { rows } = await db.lastUsers();
+        socket.emit("LAST_USERS", rows);
     });
 
     socket.on("sendMessage", async function (data) {

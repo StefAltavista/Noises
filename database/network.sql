@@ -33,3 +33,21 @@ CREATE TABLE messages(
      sender_id      int,
      text           VARCHAR
 )
+
+CREATE TABLE events(
+     id                  SERIAL PRIMARY KEY,
+     creator             int,
+     evt_name            VARCHAR,
+     startDate           DATE,
+     startTime           TIME,
+     endDate             DATE,
+     endTime             TIME,
+     evt_location        VARCHAR,
+     poster              VARCHAR,
+     evt_description     VARCHAR,
+     collaborators       VARCHAR
+
+)
+
+INSERT INTO events (creator, evt_name, startDate, startTime, endDate, endTime, evt_location, poster, evt_description, collaborators) 
+VALUES ('203','Autonoma','2022-01-21','20:00','2022-01-21','20:00','berlin','poster','description','collaborators');

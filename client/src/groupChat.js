@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import { getMessages, newMessage } from "./redux/messages/slice.js";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 //get user socket.io
 import { socket } from "./socketInit.js";
 
-export default function NoisesPool() {
+export default function NoisyPool() {
     const elemRef = useRef();
     const dispatch = useDispatch();
     const messages = useSelector((state) => state.messages);
@@ -42,25 +43,38 @@ export default function NoisesPool() {
     }
 
     return (
-        <div id="groupChat">
-            <p>Noises Pool</p>
-            <div>
-                {messages && (
-                    <ul id="messages">
-                        {messages.map((msg) => (
-                            <li key={msg.id} id="message" ref={elemRef}>
-                                <img src={msg.imgurl} id="chatImg" />
-                                <strong>
-                                    {msg.name} {msg.surname}:{" "}
-                                </strong>
-                                <p>{msg.text}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+        <div id="NoisyPool">
+            <div id="groupChatHead">
+                <p>Noisy Pool</p>
+                <p>x</p>
             </div>
-            <form onSubmit={submit}>
-                <input type="text" name="messageInput"></input>
+
+            {messages && (
+                <ul id="groupChat">
+                    {messages.map((msg) => (
+                        <li key={msg.id} id="message" ref={elemRef}>
+                            <Link to={`/user/${msg.sender_id}`}>
+                                <div id="chatUser">
+                                    <img src={msg.imgurl} id="chatImg" />
+                                    <p id="messageSenderName">
+                                        {msg.name} {msg.surname[0]}.
+                                    </p>
+                                </div>
+
+                                <p>{msg.text}</p>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            <form onSubmit={submit} id="chatInput">
+                <input
+                    type="text"
+                    name="messageInput"
+                    autoComplete="off"
+                ></input>
+                <img src="/logo.png" id="sendMessage" />
             </form>
         </div>
     );

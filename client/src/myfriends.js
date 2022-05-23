@@ -20,16 +20,6 @@ export default function MyFriends() {
         }).then(() => dispatch(unfriend(id)));
     }
 
-    // fetch("/user/friends")
-    //     .then((res) => res.json())
-    //     .then((friends) =>
-    //         Promise.all(
-    //             friends.map((id) =>
-    //                 fetch(`user/${id}`).then((res) => res.json())
-    //             )
-    //         ).then((friendData) => dispatch(getMyFriends(friendData)))
-    //     );
-
     useEffect(() => {
         fetch("/user/friends")
             .then((res) => res.json())

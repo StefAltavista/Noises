@@ -5,6 +5,8 @@ import MyFriends from "./myfriends.js";
 import OtherAccount from "./otherAccount.js";
 import Results from "./results.js";
 import NoisesPool from "./groupChat";
+import Dashboard from "./dashboard";
+import CreateEvent from "./createEvent.js";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAccount } from "./redux/setMe/slice.js";
@@ -46,53 +48,59 @@ class App extends Component {
     render() {
         return (
             <div>
-                {console.log(this.props)}
                 <BrowserRouter>
                     <div>
-                        <Navigator
-                            id={this.state.id}
-                            name={this.state.name}
-                            surname={this.state.surname}
-                            imgurl={this.state.imgurl}
-                            update={this.update}
-                            searchResults={this.searchResults}
-                        ></Navigator>
-                        <Switch>
-                            {/* route to my profile page */}
-                            <Route exact path="/me">
-                                <MyAccount
-                                    name={this.state.name}
-                                    surname={this.state.surname}
-                                    imgurl={this.state.imgurl}
-                                    bio={this.state.bio}
-                                    update={this.update}
-                                ></MyAccount>
-                            </Route>
+                        <div id="NavBar">
+                            <Navigator
+                                id={this.state.id}
+                                name={this.state.name}
+                                surname={this.state.surname}
+                                imgurl={this.state.imgurl}
+                                update={this.update}
+                                searchResults={this.searchResults}
+                            ></Navigator>
+                        </div>
+                        <div id="body">
+                            <Switch>
+                                {/* route to my profile page */}
+                                <Route exact path="/me">
+                                    <MyAccount
+                                        name={this.state.name}
+                                        surname={this.state.surname}
+                                        imgurl={this.state.imgurl}
+                                        bio={this.state.bio}
+                                        update={this.update}
+                                    ></MyAccount>
+                                </Route>
 
-                            {/* route to other user profile page */}
+                                {/* route to other user profile page */}
 
-                            <Route path="/user/:otherUserId">
-                                <OtherAccount />
-                            </Route>
-                            <Route path="/pool">
-                                <NoisesPool />
-                            </Route>
+                                <Route path="/user/:otherUserId">
+                                    <OtherAccount />
+                                </Route>
+                                <Route path="/myMessages">
+                                    <NoisesPool />
+                                </Route>
+                                <Route path="/createEvent">
+                                    <CreateEvent />
+                                </Route>
 
-                            {/* route to search result page */}
-                            <Route path="/results">
-                                <Results
-                                    allResults={this.state.searchResults}
-                                ></Results>
-                            </Route>
-                            {/* route to MyFriends and requests */}
-                            <Route path="/myfriends">
-                                <MyFriends />
-                            </Route>
+                                {/* route to search result page */}
+                                <Route path="/results">
+                                    <Results
+                                        allResults={this.state.searchResults}
+                                    ></Results>
+                                </Route>
+                                {/* route to MyFriends and requests */}
+                                <Route path="/myfriends">
+                                    <MyFriends />
+                                </Route>
 
-                            <Route path="/">
-                                <h1>dashboard</h1>
-                            </Route>
-                        </Switch>
+                                <Route path="/">
+                                    <Dashboard />
+                                </Route>
+                            </Switch>
+                        </div>
                     </div>
                 </BrowserRouter>
             </div>
