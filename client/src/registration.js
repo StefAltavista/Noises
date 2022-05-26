@@ -70,7 +70,7 @@ export default class Registration extends Component {
                 )}
                 <button>Register</button>
 
-                <p className="log">
+                <p id="singResetLinks">
                     already registered? <Link to="/login">Log in</Link>
                 </p>
             </form>

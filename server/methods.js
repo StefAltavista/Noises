@@ -43,6 +43,7 @@ const updateFriendship = (action, otherUserId, myId) => {
     switch (action) {
         case "unfriend":
             db.getMyfriends(otherUserId).then(({ friends }) => {
+                console.log(friends);
                 const idx = friends.indexOf(+myId);
                 friends.splice(idx, 1);
                 console.log("their friends after splice:", friends);

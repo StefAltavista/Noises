@@ -46,7 +46,6 @@ export default function NoisyPool() {
         <div id="NoisyPool">
             <div id="groupChatHead">
                 <p>Noisy Pool</p>
-                <p>x</p>
             </div>
 
             {messages && (

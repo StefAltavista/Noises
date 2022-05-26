@@ -43,31 +43,34 @@ export default function MyFriends() {
 
     return (
         <div id="myfriendsPage">
-            <p>Friends</p>
             {friends && (
-                <ul id="MyFriends">
-                    {friends.map((friend) => {
-                        return (
-                            <li key={friend.id}>
-                                <div id="friend">
-                                    <Link to={`/user/${friend.id}`}>
-                                        <img src={friend.imgurl} />{" "}
-                                    </Link>
-                                    <p>
-                                        {friend.name} {friend.surname}
-                                    </p>
-                                    <button onClick={() => remove(friend.id)}>
-                                        Remove
-                                    </button>
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ul>
+                <div id="peopleList">
+                    <p>Friends</p>
+                    <ul id="MyFriends">
+                        {friends.map((friend) => {
+                            return (
+                                <li key={friend.id}>
+                                    <div id="friend">
+                                        <Link to={`/user/${friend.id}`}>
+                                            <img src={friend.imgurl} />{" "}
+                                        </Link>
+                                        <p>
+                                            {friend.name} {friend.surname}
+                                        </p>
+                                        <button
+                                            onClick={() => remove(friend.id)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
             )}
-            <div id="requests">
-                <MyRequests />
-            </div>
+
+            <MyRequests />
         </div>
     );
 }

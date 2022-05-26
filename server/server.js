@@ -131,7 +131,7 @@ app.put("/pending", async (req, res) => {
 });
 app.put("/user/connect", async (req, res) => {
     const { action, otherUserId } = req.body;
-    console.log(action);
+    console.log(action, otherUserId);
     updateFriendship(action, otherUserId, req.session.userId).then((x) => {
         console.log("Server - updatefriendship:", x);
         res.json(x);
@@ -247,22 +247,24 @@ app.post(
     uploader.single("file"),
     upload,
     (req, res) => {
-        //console.log("\n\nPOST, req file filename \n", req.file.filename, "\n\n");
         let imgUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
         res.json(imgUrl);
     }
 );
 app.post("/addNewEvent", (req, res) => {
-    req.body = { id: req.session.userId, ...req.body };
-    console.log(req.body);
-    db.addNewEvent(req.body).then((event) => res.json(event));
-});
-app.post("/event", (req, res) => {
-    console.log(req.body.id);
-    db.getEvent(req.body.id).then(({ rows }) => {
-        console.log("get single event", rows);
+    req.body = { creator: req.session.userId, ...req.body };
+    db.addNewEvent(req.body).then(({ rows }) => {
         res.json(rows[0]);
     });
+});
+app.put("/updateEvent", (req, res) => {
+    db.updateEvent(req.body).then(({ rows }) => {
+        console.log("updated in db:", rows);
+        res.json(rows[0]);
+    });
+});
+app.post("/event", (req, res) => {
+    db.getEvent(req.body.id).then(({ rows }) => res.json(rows[0]));
 });
 app.get("/allEvents", (req, res) => {
     db.getAllEvents().then(({ rows }) => res.json(rows));

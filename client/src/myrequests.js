@@ -85,31 +85,38 @@ export default function MyRequests() {
     }, []);
 
     return (
-        <div>
-            <p>Pending Requests</p>
+        <div id="peopleList">
+            {!requests && <p>No pending Requests</p>}
             {requests && (
-                <ul id="MyFriends">
-                    {requests.map((user) => {
-                        return (
-                            <li key={user.id}>
-                                <div id="friend">
-                                    <Link to={`/user/${user.id}`}>
-                                        <img src={user.imgurl} />
-                                        <p>
-                                            {user.name} {user.surname}
-                                        </p>
-                                        <button onClick={() => accept(user.id)}>
-                                            Accept
-                                        </button>
-                                        <button onClick={() => reject(user.id)}>
-                                            Reject
-                                        </button>
-                                    </Link>
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ul>
+                <>
+                    <p>Pending Requests</p>
+                    <ul id="MyFriends">
+                        {requests.map((user) => {
+                            return (
+                                <li key={user.id}>
+                                    <div id="friend">
+                                        <Link to={`/user/${user.id}`}>
+                                            <img src={user.imgurl} />
+                                            <p>
+                                                {user.name} {user.surname}
+                                            </p>
+                                            <button
+                                                onClick={() => accept(user.id)}
+                                            >
+                                                Accept
+                                            </button>
+                                            <button
+                                                onClick={() => reject(user.id)}
+                                            >
+                                                Reject
+                                            </button>
+                                        </Link>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </>
             )}
         </div>
     );

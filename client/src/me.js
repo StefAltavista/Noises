@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import RecentUsers from "./recentUsers";
 export default function Me() {
     const me = useSelector((state) => state.account);
     useEffect(() => {
@@ -19,6 +19,8 @@ export default function Me() {
                     </p>
                 </div>
             </Link>
+
+            <RecentUsers />
         </>
     );
 }

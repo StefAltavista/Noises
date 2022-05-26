@@ -5,11 +5,11 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 
 const Welcome = () => {
     return (
-        <div>
+        <div className="welcomebody">
             <BrowserRouter>
                 <div>
                     <Link to={"/"}>
-                        <div className="welcomebody">
+                        <div>
                             <div id="noise">
                                 <img src="/logo.png" id="mainlogo" />
                                 <h1>N O I S E S</h1>

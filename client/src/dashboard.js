@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import NoisyPool from "./groupChat";
 import RecentUsers from "./recentUsers";
 import EventsFeed from "./eventsFeed";
+
 import Me from "./me";
 
 export default function Dashboard() {
@@ -15,7 +16,6 @@ export default function Dashboard() {
                 </div>
             </div>
             <div id="newsFeed">
-                <RecentUsers />
                 <EventsFeed />
             </div>
             <div>

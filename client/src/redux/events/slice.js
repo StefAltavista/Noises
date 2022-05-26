@@ -1,5 +1,5 @@
 export function eventsReducer(events = [], action) {
-    if (action.type == "ADD_EVENT") {
+    if (action.type == "MY_EVENTS") {
         console.log(action.payload.event);
         events = [...events, action.payload.event];
     }
@@ -8,7 +8,7 @@ export function eventsReducer(events = [], action) {
 
 export function getAllEvent(event) {
     return {
-        type: "GET_ALL_EVENTS",
+        type: "MY_EVENTS",
         payload: { event },
     };
 }

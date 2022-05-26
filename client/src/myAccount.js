@@ -1,7 +1,8 @@
 import { Component } from "react";
 import ImgModal from "./imgModal.js";
 import EditBio from "./editbio.js";
-
+import { Link } from "react-router-dom";
+import MyFriends from "./myfriends";
 export default class MyAccount extends Component {
     constructor(props) {
         super(props);
@@ -54,6 +55,9 @@ export default class MyAccount extends Component {
                             )}
                         </div>
                     </div>
+                </div>
+                <div id="friends">
+                    <MyFriends />
                 </div>
                 {this.state.imgModal && (
                     <ImgModal

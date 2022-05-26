@@ -29,13 +29,20 @@ export default class Navigator extends Component {
     render() {
         return (
             <nav>
-                <Link to="/">
-                    <div id="navLeft">
-                        <img src="/logo.png" id="logo" />
+                <div id="navLeft">
+                    <img src="/logo.png" id="logo" />
 
-                        <strong>N O I S E S</strong>
-                    </div>
-                </Link>
+                    <strong id="nav_title">
+                        <p>N O I S E S </p>
+                    </strong>
+                    <Link to="/" className="navLinks">
+                        <p>Dashboard</p>
+                    </Link>
+
+                    <Link to="/calendar" className="navLinks">
+                        <p>Calendar</p>
+                    </Link>
+                </div>
 
                 <div id="commands">
                     <div id="search">

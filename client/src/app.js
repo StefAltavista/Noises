@@ -8,6 +8,7 @@ import NoisesPool from "./groupChat";
 import Dashboard from "./dashboard";
 import CreateEvent from "./createEvent.js";
 import Event from "./event.js";
+import Calendar from "./calendar.js";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAccount } from "./redux/setMe/slice.js";
@@ -87,6 +88,9 @@ class App extends Component {
                                 </Route>
                                 <Route path="/event/:id">
                                     <Event />
+                                </Route>
+                                <Route path="/calendar">
+                                    <Calendar />
                                 </Route>
 
                                 {/* route to search result page */}

@@ -61,11 +61,10 @@ export default class Login extends Component {
                         )}
                         <button>Enter</button>
 
-                        <p className="register">
+                        <p id="singResetLinks">
                             Dont have an account <Link to="/">Sign in</Link>
-                        </p>
-                        <p className="reset">
-                            Forgot your password?
+                            <br></br>
+                            <br></br>Forgot your password?
                             <Link to="/resetpassword">Click here</Link>
                         </p>
                     </form>
