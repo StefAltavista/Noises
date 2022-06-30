@@ -13,6 +13,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAccount } from "./redux/setMe/slice.js";
 
+//comment
+
 class App extends Component {
     constructor() {
         super();
