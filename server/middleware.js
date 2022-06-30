@@ -1,3 +1,5 @@
+/////DELETE OLD STUFF///////
+
 function checkRegistration(req, res, next) {
     const { email, first, last } = req.body;
 
