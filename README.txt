@@ -1,7 +1,13 @@
-To Run 
+        - > N O I S E S < -
+H I G H  V O L T A G E  E V E N T S
 
-Terminal 1:
-npm start 
+Underground Event Calendar & Promotion
+Labels,Promoters,Organizations Network
 
-Terminal 2
-npm run dev:client
+
+
+
+To Mount:
+
+Terminal 1 => npm start 
+Terminal 2 => npm run dev:client
