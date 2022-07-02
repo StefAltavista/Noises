@@ -2,7 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useEffect, useState } from "react";
-import EventPreview from "./eventPreview";
+import EventPreview from "./EventPreview";
 
 export default function Calendar() {
     const [events, setEvents] = useState();

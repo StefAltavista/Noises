@@ -1,4 +1,4 @@
-import { socket } from "./socketInit.js";
+import { socket } from "../socketInit.js";
 import { useEffect, useState } from "react";
 export default function RecentUsers() {
     const [lastUsers, setLastUsers] = useState([]);

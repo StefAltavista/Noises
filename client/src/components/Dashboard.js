@@ -1,14 +1,14 @@
-import NoisyPool from "./groupChat";
-import EventsFeed from "./eventsFeed";
+import NoisyPool from "./GroupChat";
+import EventsFeed from "./EventsFeed";
 
-import Me from "./me";
+import MeDashSide from "./MeDashSide";
 
 export default function Dashboard() {
     return (
         <div id="dashboard">
             <div>
                 <div id="mine">
-                    <Me />
+                    <MeDashSide />
                 </div>
             </div>
             <div id="newsFeed">

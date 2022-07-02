@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
-import UpdateEvent from "./editEvent";
+import UpdateEvent from "./EditEvent";
 
 export default function Event(props) {
     let id;

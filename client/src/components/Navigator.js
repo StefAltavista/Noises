@@ -1,6 +1,6 @@
 import { Component } from "react";
-import Settings from "./settings";
-import Search from "./search";
+import Settings from "./Settings";
+import Search from "./Search";
 import { Link } from "react-router-dom";
 
 export default class Navigator extends Component {

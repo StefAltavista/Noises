@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 //import Action Creator
-import { getMyFriends, unfriend } from "./redux/friends/slice.js";
+import { getMyFriends, unfriend } from "../redux/friends/slice.js";
 //import component MyRequests
-import MyRequests from "./myrequests.js";
+import MyRequests from "./MyRequests.js";
 
 export default function MyFriends() {
     const dispatch = useDispatch();

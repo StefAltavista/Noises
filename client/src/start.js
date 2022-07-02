@@ -5,8 +5,8 @@ import { init } from "./socketInit.js";
 
 //components
 import Welcome from "./welcome.js";
-import UpdatePs from "./updateps.js";
-import App from "./app.js";
+import UpdatePassword from "./components/UpdatePassword.js";
+import App from "./App.js";
 import { Provider } from "react-redux";
 import reducer from "./redux/reducer.js";
 import { createStore, applyMiddleware } from "redux";
@@ -27,7 +27,7 @@ const store = createStore(
     if (verificationData.verified && verificationData.email) {
         fetch("/user/clearVerification");
         ReactDOM.render(
-            <UpdatePs email={verificationData.email} />,
+            <UpdatePassword email={verificationData.email} />,
             document.querySelector("main")
         );
     } else {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import EventPreview from "./eventPreview";
+//DO THE LINK
+import EventPreview from "./EventPreview";
 
 export default function EventsFeed() {
     const [events, setEvents] = useState();

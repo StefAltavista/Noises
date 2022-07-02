@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import { getMessages, newMessage } from "./redux/messages/slice.js";
+import { getMessages, newMessage } from "../redux/messages/slice.js";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 //get user socket.io
-import { socket } from "./socketInit.js";
+import { socket } from "../socketInit.js";
 
 export default function NoisyPool() {
     const elemRef = useRef();

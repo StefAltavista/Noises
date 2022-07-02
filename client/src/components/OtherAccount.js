@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import FriendButton from "./friendButton.js";
+import FriendButton from "./FriendButton.js";
 
 export default function OtherAccount() {
     const { otherUserId } = useParams();

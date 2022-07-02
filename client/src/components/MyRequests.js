@@ -7,8 +7,8 @@ import {
     getMyRequests,
     acceptRequest,
     rejectRequest,
-} from "./redux/requests/slice.js";
-import { acceptFriend } from "./redux/friends/slice.js";
+} from "../redux/requests/slice.js";
+import { acceptFriend } from "../redux/friends/slice.js";
 
 export default function MyRequests() {
     let myId;

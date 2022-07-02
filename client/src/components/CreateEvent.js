@@ -1,33 +1,28 @@
-import { useEffect } from "react";
-import { useReducer, useState } from "react";
-import Event from "./event";
-export default function EditEvent(props) {
-    const { eventToEdit } = props;
-    const [editEvent, updateedEditEvent] = useReducer(
-        (editEvent, updates) => ({
-            ...editEvent,
-            ...updates,
-        }),
-        eventToEdit
-    );
-    useEffect(() => {
-        console.log("edit:", editEvent);
-    }, []);
+let submit = {};
 
+import { useState, useEffect } from "react";
+
+import Event from "./Event.js";
+
+export default function CreateEvent() {
+    const [newEvent, setNewEvent] = useState({});
     const [step, setStep] = useState(1);
-    const [updatedEvent, setUpdatedEvent] = useState();
 
     const handleChange = (e) => {
-        updateedEditEvent({ ...editEvent, [e.target.name]: e.target.value });
+        setNewEvent({ ...newEvent, [e.target.name]: e.target.value });
     };
     const nextStep = (e) => {
-        console.log("editEvent", editEvent);
+        console.log("submit", submit);
+        console.log("newEvent", newEvent);
         e.preventDefault();
+        console.log("form fields:", e.target.length);
+
         for (let i = 0; i < e.target.length; i++) {
             console.log(e.target[i].name);
             console.log(e.target[i].value);
-            updateedEditEvent({ [e.target[i].name]: e.target[i].value });
+            submit = { ...submit, [e.target[i].name]: e.target[i].value };
         }
+        setNewEvent(submit);
         setStep(step + 1);
     };
     const backStep = () => {
@@ -36,9 +31,10 @@ export default function EditEvent(props) {
 
     async function addPoster(e) {
         if (!e) {
-            if (!editEvent.poster) {
+            if (!newEvent.poster) {
                 imgUrl = "/defaultEventImg.png";
-                updateedEditEvent({ poster: imgUrl });
+                submit = { ...submit, poster: imgUrl };
+                setNewEvent(submit);
                 return;
             } else return;
         }
@@ -53,46 +49,40 @@ export default function EditEvent(props) {
                 body: formData,
             });
             imgUrl = await response.json();
-        } else if (editEvent.poster) {
+        } else if (newEvent.poster) {
             setStep(step + 1);
         } else {
             imgUrl = "/defaultEventImg.png";
         }
         console.log(imgUrl);
-        updateedEditEvent({ poster: imgUrl });
+        submit = { ...submit, poster: imgUrl };
+        setNewEvent(submit);
     }
 
     const publish = () => {
-        console.log("editevent", editEvent);
-        if (editEvent.published) {
-            saveToDb();
-        }
-        updateedEditEvent({ published: true });
+        setNewEvent({ ...newEvent, published: true });
     };
     const saveDraft = () => {
-        if (!editEvent.published) {
-            saveToDb();
-        }
-        updateedEditEvent({ published: false });
+        setNewEvent({ ...newEvent, published: false });
     };
     useEffect(() => {
         if (step == 4) {
+            console.log("USE EFFECT");
             saveToDb();
         }
-    }, [editEvent.published]);
+    }, [newEvent.published]);
 
     const saveToDb = () => {
-        console.log("save to db:", editEvent);
-        fetch("/updateEvent", {
+        console.log("save to db:", newEvent);
+        fetch("/addNewEvent", {
             headers: { "content-type": "application/json" },
-            method: "PUT",
-            body: JSON.stringify(editEvent),
+            method: "POST",
+            body: JSON.stringify(newEvent),
         })
             .then((res) => res.json())
-            .then((updatedEvent) => {
-                console.log("updated event", updatedEvent);
-                setUpdatedEvent(updatedEvent);
+            .then((event) => {
                 setStep(step + 1);
+                setNewEvent(event);
             });
     };
     const modify = () => {
@@ -112,7 +102,7 @@ export default function EditEvent(props) {
                                             required
                                             type="text"
                                             name="evt_name"
-                                            defaultValue={editEvent.evt_name}
+                                            defaultValue={newEvent.name}
                                             onChange={handleChange}
                                         ></input>
                                     </div>
@@ -123,7 +113,7 @@ export default function EditEvent(props) {
                                             required
                                             type="date"
                                             name="start_date"
-                                            defaultValue={editEvent.start_date}
+                                            defaultValue={newEvent.startDate}
                                             onChange={handleChange}
                                         ></input>
                                         <p>Start time</p>
@@ -131,7 +121,7 @@ export default function EditEvent(props) {
                                             required
                                             type="time"
                                             name="start_time"
-                                            defaultValue={editEvent.start_time}
+                                            defaultValue={newEvent.startTime}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -142,7 +132,7 @@ export default function EditEvent(props) {
                                             required
                                             type="date"
                                             name="end_date"
-                                            defaultValue={editEvent.end_date}
+                                            defaultValue={newEvent.endDate}
                                             onChange={handleChange}
                                         ></input>
                                         <p>End time</p>
@@ -150,7 +140,7 @@ export default function EditEvent(props) {
                                             required
                                             type="time"
                                             name="end_time"
-                                            defaultValue={editEvent.end_time}
+                                            defaultValue={newEvent.endTime}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -159,9 +149,7 @@ export default function EditEvent(props) {
                                         <input
                                             type="text"
                                             name="evt_location"
-                                            defaultValue={
-                                                editEvent.evt_location
-                                            }
+                                            defaultValue={newEvent.location}
                                             onChange={handleChange}
                                         ></input>
                                     </div>
@@ -195,15 +183,16 @@ export default function EditEvent(props) {
                                 <form onSubmit={nextStep}>
                                     <p>Description</p>
                                     <textarea
+                                        id="descritpionTextArea"
                                         name="evt_description"
-                                        defaultValue={editEvent.evt_description}
+                                        defaultValue={newEvent.evt_description}
                                         onChange={handleChange}
                                     ></textarea>
                                     <p>Collaborators</p>
                                     <input
                                         type="text"
                                         name="collaborators"
-                                        defaultValue={editEvent.collaborators}
+                                        defaultValue={newEvent.collaborators}
                                         onChange={handleChange}
                                     ></input>
 
@@ -230,34 +219,32 @@ export default function EditEvent(props) {
                     </div>
                     {step < 5 && (
                         <div id="eventPreview">
-                            <p id="eventName"> {editEvent.evt_name}</p>
-                            <img src={editEvent.poster} id="eventPreviewImg" />
+                            <p id="eventName"> {newEvent.evt_name}</p>
+                            <img src={newEvent.poster} id="eventPreviewImg" />
 
                             <div id="eventInfo">
-                                <p>{editEvent.evt_location}</p>
-                                <p>{editEvent.start_date}</p>
-                                <p>{editEvent.start_time}</p>
-                                <p>{editEvent.end_date}</p>
-                                <p>{editEvent.end_time}</p>
+                                <p>{newEvent.evt_location}</p>
+                                <p>{newEvent.start_date}</p>
+                                <p>{newEvent.start_time}</p>
+                                <p>{newEvent.end_date}</p>
+                                <p>{newEvent.end_time}</p>
                             </div>
 
-                            <p> {editEvent.description}</p>
-                            {editEvent.collaborators && (
-                                <p>Collaborators: {editEvent.collaborators}</p>
+                            <p> {newEvent.description}</p>
+                            {newEvent.collaborators && (
+                                <p>Collaborators: {newEvent.collaborators}</p>
                             )}
                         </div>
                     )}
                 </div>
             )}
-            {step == 5 && updatedEvent.id && (
+            {step == 5 && newEvent.id && (
                 <div id="congratulations">
-                    {updatedEvent.published && (
+                    {newEvent.published && (
                         <p>Congratulations, your events has been Published</p>
                     )}
-                    {!updatedEvent.published && (
-                        <p>Your events has been saved</p>
-                    )}
-                    <Event id={updatedEvent.id}></Event>
+                    {!newEvent.published && <p>Your events has been saved</p>}
+                    <Event id={newEvent.id}></Event>
                 </div>
             )}
         </>

@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-export default class UpdatePs extends Component {
+export default class UpdatePassword extends Component {
     constructor() {
         super();
         this.state = { update: true };

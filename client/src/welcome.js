@@ -1,6 +1,6 @@
-import Registration from "./registration";
-import Login from "./login";
-import ResetPassword from "./resetpassword";
+import Registration from "./components/Registration";
+import Login from "./components/LogIn";
+import ResetPassword from "./components/ResetPassword";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 const Welcome = () => {

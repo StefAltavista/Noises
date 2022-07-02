@@ -1,8 +1,8 @@
 import { Component } from "react";
-import ImgModal from "./imgModal.js";
-import EditBio from "./editbio.js";
+import ImgModal from "./ImgModal.js";
+import EditBio from "./Editbio.js";
 import { Link } from "react-router-dom";
-import MyFriends from "./myfriends";
+import MyFriends from "./MyFriends";
 export default class MyAccount extends Component {
     constructor(props) {
         super(props);
