@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard";
 import CreateEvent from "./components/CreateEvent.js";
 import Event from "./components/Event.js";
 import Calendar from "./components/Calendar.js";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAccount } from "./redux/setMe/slice.js";
 
@@ -65,7 +65,7 @@ class App extends Component {
                             ></Navigator>
                         </div>
                         <div id="body">
-                            <Switch>
+                            <Routes>
                                 {/* route to my profile page */}
                                 <Route exact path="/me">
                                     <MyAccount
@@ -109,7 +109,7 @@ class App extends Component {
                                 <Route path="/">
                                     <Dashboard />
                                 </Route>
-                            </Switch>
+                            </Routes>
                         </div>
                     </div>
                 </BrowserRouter>
