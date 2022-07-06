@@ -1,15 +1,15 @@
 const aws = require("aws-sdk");
 const fs = require("fs");
-let secrets;
+let secret;
 if (process.env.NODE_ENV == "production") {
-    secrets = process.env;
+    secret = process.env;
 } else {
-    secrets = require("./secrets.json");
+    secret = require("../config.json");
 }
 
 const s3 = new aws.S3({
-    accessKeyId: secrets.AWS_KEY,
-    secretAccessKey: secrets.AWS_SECRET,
+    accessKeyId: secret.AWS_KEY,
+    secretAccessKey: secret.AWS_SECRET,
 });
 
 module.exports.upload = (req, res, next) => {
