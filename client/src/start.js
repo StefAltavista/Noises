@@ -1,12 +1,16 @@
 //get the DOM
 import ReactDOM from "react-dom";
+
 //initialize socket.io if logged in
 import { init } from "./socketInit.js";
 
 //components
 import Welcome from "./welcome.js";
 import UpdatePassword from "./components/UpdatePassword.js";
-import App from "./App.js";
+import App from "./components/App";
+
+//import App from "./App.js";
+
 import { Provider } from "react-redux";
 import reducer from "./redux/reducer.js";
 import { createStore, applyMiddleware } from "redux";
