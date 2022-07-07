@@ -1,7 +1,6 @@
 //get the DOM
-import ReactDOM from "react-dom";
-
-//initialize socket.io if logged in
+// import ReactDOM from "react-dom";
+import * as ReactDOMClient from "react-dom/client"; //initialize socket.io if logged in
 import { init } from "./socketInit.js";
 
 //components
@@ -21,6 +20,8 @@ const store = createStore(
     composeWithDevTools(applyMiddleware(immutableState.default()))
 );
 
+const container = document.querySelector("main");
+const root = ReactDOMClient.createRoot(container);
 //comment to push first commit
 
 //create store is deprecated,
@@ -32,15 +33,12 @@ const store = createStore(
     const verificationData = await verification.json();
     if (verificationData.verified && verificationData.email) {
         fetch("/user/clearVerification");
-        ReactDOM.render(
-            <UpdatePassword email={verificationData.email} />,
-            document.querySelector("main")
-        );
+        root.render(<UpdatePassword email={verificationData.email} />);
     } else {
         const id = await fetch("/user/id.json");
         const idData = await id.json();
         if (!idData.userId) {
-            ReactDOM.render(<Welcome />, document.querySelector("main"));
+            root.render(<Welcome />);
         } else {
             init();
             const app = (
@@ -49,7 +47,7 @@ const store = createStore(
                 </Provider>
             );
 
-            ReactDOM.render(app, document.querySelector("main"));
+            root.render(app);
         }
     }
 })();
