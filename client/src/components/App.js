@@ -3,7 +3,10 @@ import { useDispatch } from "react-redux";
 
 // import Navigator from "./Navigator.js";
 import NavBar from "./NavBar.js";
-import MyAccount from "./MyAccount.js";
+// import MyAccount from "./MyAccount.js";
+
+import ProfilePage from "./ProfilePage.js";
+
 import MyFriends from "./MyFriends.js";
 import OtherAccount from "./OtherAccount.js";
 import Results from "./Results.js";
@@ -47,8 +50,6 @@ export default function App() {
                             id={user.id}
                             name={user.name}
                             surname={user.surname}
-                            imgurl={user.imgurl}
-                            update={update}
                             searchResults={searchResults}
                         ></NavBar>
                     </div>
@@ -59,7 +60,7 @@ export default function App() {
                                 exact
                                 path="/me"
                                 element={
-                                    <MyAccount
+                                    <ProfilePage
                                         name={user.name}
                                         surname={user.surname}
                                         imgurl={user.imgurl}
