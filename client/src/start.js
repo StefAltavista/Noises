@@ -1,5 +1,5 @@
 //get the DOM
-// import ReactDOM from "react-dom";
+
 import * as ReactDOMClient from "react-dom/client"; //initialize socket.io if logged in
 import { init } from "./socketInit.js";
 
