@@ -10,7 +10,7 @@ import App from "./App.js";
 import { Provider } from "react-redux";
 import reducer from "./redux/reducer.js";
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { composeWithDevTools } from "@redux-devtools/extension";
 import * as immutableState from "redux-immutable-state-invariant";
 const store = createStore(
     reducer,

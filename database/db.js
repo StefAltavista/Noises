@@ -1,5 +1,7 @@
 /* eslint-disable indent */
 const spicedPg = require("spiced-pg");
+// require credentials from config.json
+const { DB_USER, DB_PASSWORD, DB_NAME } = require("../config.json");
 
 let db;
 //SETUP
@@ -13,7 +15,9 @@ if (process.env.DATABASE_URL) {
     //     DATABASE_PASSWORD,
     //     DATABASE_NAME,
     // } = require("./secrets.json");
-    db = spicedPg("postgres:postgres:postgres@localhost:5432/socialnetwork");
+    db = spicedPg(
+        `postgres:${DB_USER}:${DB_PASSWORD}@localhost:5432/${DB_NAME}`
+    );
     // console.log(`[db] Connecting to: ${DATABASE_NAME}`);
     console.log(`[db] Connecting to: local`);
 }

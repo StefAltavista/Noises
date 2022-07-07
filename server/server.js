@@ -1,31 +1,69 @@
-//SERVER setup
+// ----------------------------------------------------------------
+// IMPORT DEPENDENCIES---------------------------------------------
+// ----------------------------------------------------------------
 
 //express
 const express = require("express");
-const app = express();
+// require compression
+const compression = require("compression");
+// require path
+const path = require("path");
+// require cookie-session
+const cookieSession = require("cookie-session");
+// require multer
+const multer = require("multer");
+// require random string generator module
+const uidSafe = require("uid-safe");
+// cookie-session
+const secret =
+    process.env.NODE_ENV == "production"
+        ? process.env
+        : require("../config.json");
+// SETUP SOCKET.IO
+const { Server } = require("http");
 
+// ----------------------------------------------------------------
+// SERVER SETUP----------------------------------------------------
+// ----------------------------------------------------------------
+
+// start the server
+const app = express();
+// socket.io implementation
+const server = Server(app);
+// choose the port
+const PORT = process.env.PORT || 3001;
+
+// ----------------------------------------------------------------
+// MIDDLEWARE SETUP------------------------------------------------
+// ----------------------------------------------------------------
+// setup to receive and parse JSON files
+app.use(express.json());
+// compresses th response
+app.use(compression());
+// serve static files in /public
+app.use(express.static(path.join(__dirname, "..", "client", "public")));
+// setup middleware to populate req.body with form data
+app.use(express.urlencoded({ extended: false }));
+//set up cookies in express.app & socket.io
+const cookieSessionMiddleware = cookieSession({
+    name: "noises-session",
+    secret: secret.COOKIE_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    sameSite: true,
+});
+app.use(cookieSessionMiddleware);
 ///socket.io
-const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
         callback(null, req.headers.referer.startsWith("http://localhost:3000")),
 });
 
-//set up cookies in express.app & socket.io
-const cookieSession = require("cookie-session");
-const cookieSessionMiddleware = cookieSession({
-    secret: `MaskingTheCookieWithThisString`,
-    maxAge: 1000 * 60 * 60 * 24 * 14,
-});
-app.use(cookieSessionMiddleware);
 io.use(function (socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
 
 // set up multer
-const multer = require("multer");
 const { upload } = require("./s3");
-const uidSafe = require("uid-safe");
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, path.join(__dirname, "uploads")); // null (if no err!)
@@ -38,7 +76,6 @@ const storage = multer.diskStorage({
     },
 });
 const uploader = multer({ storage });
-app.use(express.urlencoded({ extended: false }));
 
 //encrypting library
 const Cryptr = require("cryptr");
@@ -61,14 +98,6 @@ const {
 
 //middlewares and helpers
 const chalk = require("chalk");
-const path = require("path");
-//compressing the response
-const compression = require("compression");
-app.use(compression());
-//use json middleware for every request
-app.use(express.json());
-//connect to public
-app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 app.get("/user/id.json", (req, res) => {
     res.json({
@@ -321,6 +350,6 @@ io.on("connection", function (socket) {
 });
 
 //share the server between express and socket.io
-server.listen(process.env.PORT || 3001, function () {
-    console.log("on 3001");
+server.listen(PORT, function () {
+    console.log(`I'm listening to ${PORT}...`);
 });

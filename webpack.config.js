@@ -3,7 +3,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = () => ({
     entry: [
-        "@babel/polyfill",
         path.join(__dirname, "client", "style.css"),
         path.join(__dirname, "client", "src", "start.js"),
     ],
@@ -15,7 +14,7 @@ module.exports = () => ({
         hints: false,
     },
     devServer: {
-        contentBase: path.join(__dirname, "client", "public"),
+        static: path.join(__dirname, "client", "public"),
         proxy: {
             "/": {
                 target: "http://localhost:3001",
@@ -32,6 +31,7 @@ module.exports = () => ({
             {
                 test: /\.js$/,
                 loader: "babel-loader",
+                exclude: /node_modules/,
             },
             {
                 test: /\.css$/i,
