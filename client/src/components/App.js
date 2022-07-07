@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import Navigator from "./Navigator.js";
+// import Navigator from "./Navigator.js";
+import NavBar from "./NavBar.js";
 import MyAccount from "./MyAccount.js";
 import MyFriends from "./MyFriends.js";
 import OtherAccount from "./OtherAccount.js";
@@ -42,14 +43,14 @@ export default function App() {
             <BrowserRouter>
                 <div>
                     <div id="NavBar">
-                        <Navigator
+                        <NavBar
                             id={user.id}
                             name={user.name}
                             surname={user.surname}
                             imgurl={user.imgurl}
                             update={update}
                             searchResults={searchResults}
-                        ></Navigator>
+                        ></NavBar>
                     </div>
                     <div id="body">
                         <Routes>
