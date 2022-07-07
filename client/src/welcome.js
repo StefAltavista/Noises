@@ -1,33 +1,28 @@
+import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import Registration from "./components/Registration";
 import Login from "./components/LogIn";
 import ResetPassword from "./components/ResetPassword";
-import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 
 const Welcome = () => {
     return (
         <div className="welcomebody">
             <BrowserRouter>
-                <>
-                    <Link to={"/"}>
-                        <div>
-                            <div id="noise">
-                                <img src="/logo.png" id="mainlogo" />
-                                <h1>N O I S E S</h1>
-                            </div>
+                <Link to={"/"}>
+                    <div>
+                        <div id="noise">
+                            <img src="/logo.png" id="mainlogo" />
+                            <h1>N O I S E S</h1>
                         </div>
-                    </Link>
-                </>
-
-                <>
-                    <Routes>
-                        <Route path="/" element={<Registration />}></Route>
-                        <Route path="/login" element={<Login />}></Route>
-                        <Route
-                            path="/resetpassword"
-                            element={<ResetPassword />}
-                        ></Route>
-                    </Routes>
-                </>
+                    </div>
+                </Link>
+                <Routes>
+                    <Route path="/" element={<Registration />}></Route>
+                    <Route path="/login" element={<Login />}></Route>
+                    <Route
+                        path="/resetpassword"
+                        element={<ResetPassword />}
+                    ></Route>
+                </Routes>
             </BrowserRouter>
         </div>
     );
