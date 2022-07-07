@@ -1,15 +1,15 @@
 const aws = require("aws-sdk");
 
-let secrets;
+let secret;
 if (process.env.NODE_ENV == "production") {
-    secrets = process.env; // in prod the secrets are environment variables
+    secret = process.env; // in prod the secrets are environment variables
 } else {
-    secrets = require("./secrets.json"); // in dev they are in secrets.json which is listed in .gitignore
+    secret = require("../config.json"); // in dev they are in secrets.json which is listed in .gitignore
 }
 
 const ses = new aws.SES({
-    accessKeyId: secrets.AWS_KEY,
-    secretAccessKey: secrets.AWS_SECRET,
+    accessKeyId: secret.AWS_KEY,
+    secretAccessKey: secret.AWS_SECRET,
     region: "eu-west-1", // Make sure this corresponds to the region in which you have verified your email address (or 'eu-west-1' if you are using the Spiced credentials)
 });
 

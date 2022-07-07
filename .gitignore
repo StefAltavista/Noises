@@ -1,6 +1,9 @@
-node_modules
 .DS_Store
+node_modules
+package-lock.json
 secrets.json
 client/public/bundle.js
 client/public/bundle.js.LICENSE.txt
 bundle.css
+notes
+config.json

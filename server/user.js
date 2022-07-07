@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const cryptoRandomString = require("crypto-random-string");
+const cryptoRandomString = import("crypto-random-string");
 const db = require("./../database/db.js");
 var exists, check;
 
