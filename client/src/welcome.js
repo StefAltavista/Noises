@@ -1,13 +1,13 @@
 import Registration from "./components/Registration";
 import Login from "./components/LogIn";
 import ResetPassword from "./components/ResetPassword";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 
 const Welcome = () => {
     return (
         <div className="welcomebody">
             <BrowserRouter>
-                <div>
+                <>
                     <Link to={"/"}>
                         <div>
                             <div id="noise">
@@ -16,19 +16,18 @@ const Welcome = () => {
                             </div>
                         </div>
                     </Link>
-                </div>
+                </>
 
-                <div>
-                    <Route exact path="/">
-                        <Registration />
-                    </Route>
-                    <Route path="/login">
-                        <Login />
-                    </Route>
-                    <Route path="/resetpassword">
-                        <ResetPassword />
-                    </Route>
-                </div>
+                <>
+                    <Routes>
+                        <Route path="/" element={<Registration />}></Route>
+                        <Route path="/login" element={<Login />}></Route>
+                        <Route
+                            path="/resetpassword"
+                            element={<ResetPassword />}
+                        ></Route>
+                    </Routes>
+                </>
             </BrowserRouter>
         </div>
     );
