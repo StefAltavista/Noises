@@ -213,6 +213,7 @@ app.post("/api/password", (req, res) => {
         if (e) {
             res.json({ error: e });
             console.log("password reset error:", e);
+            return;
         } else {
             const code = `code=${rows[0].code}&email=${req.body.email}`;
             const encryptedQuery = cryptr.encrypt(code);

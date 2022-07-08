@@ -39,7 +39,7 @@ const register = (email, hash, name, surname, imgUrl, friends) => {
 };
 const newResetCode = (code, email) => {
     return db.query(
-        `INSERT INTO resetCode (code, email) VALUES ($1, $2) RETURNING *`,
+        `INSERT INTO resetcode (code, email) VALUES ($1, $2) RETURNING *`,
         [code, email]
     );
 };
