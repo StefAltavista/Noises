@@ -1,3 +1,5 @@
+//this test was meant to run on MyAccount (the old class component version of ProfilePage, this file probably need refactoring too)
+
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import MyAccount from "./MyAccount";
 import EditBio from "./Editbio";
