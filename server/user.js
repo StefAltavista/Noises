@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+//issue with crypto-random-string
 const cryptoRandomString = import("crypto-random-string");
 const db = require("./../database/db.js");
 var exists, check;
@@ -79,6 +80,7 @@ const passwordResetGetCode = (req) => {
             if (!rows[0]) {
                 return { e: "email not found", rows: null };
             } else {
+                //////////HERE IT STOPS///////////
                 const code = cryptoRandomString({ length: 6 });
                 return db.newResetCode(code, email).then(({ rows }) => {
                     return { e: null, rows };

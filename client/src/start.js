@@ -1,11 +1,11 @@
 //get the DOM
-// import ReactDOM from "react-dom";
+
 import * as ReactDOMClient from "react-dom/client"; //initialize socket.io if logged in
 import { init } from "./socketInit.js";
 
 //components
 import Welcome from "./welcome.js";
-import UpdatePassword from "./components/UpdatePassword.js";
+import PasswordUpdate from "./components/PasswordUpdate";
 import App from "./components/App";
 
 //import App from "./App.js";
@@ -33,7 +33,7 @@ const root = ReactDOMClient.createRoot(container);
     const verificationData = await verification.json();
     if (verificationData.verified && verificationData.email) {
         fetch("/user/clearVerification");
-        root.render(<UpdatePassword email={verificationData.email} />);
+        root.render(<PasswordUpdate email={verificationData.email} />);
     } else {
         const id = await fetch("/user/id.json");
         const idData = await id.json();

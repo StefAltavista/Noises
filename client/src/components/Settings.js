@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
-export default function Settings({ settingsMenu }) {
+export default function Settings({ toggle }) {
     function logout() {
-        console.log("logout");
         fetch("/logout").then(() => location.reload());
     }
     return (
-        <div id="overlay">
+        <div id="overlay" onClick={toggle}>
             <div id="settings">
-                <p onClick={settingsMenu}>X</p>
+                <p onClick={toggle}>X</p>
                 <ul>
                     <li>
                         <Link to="/me">My Account</Link>

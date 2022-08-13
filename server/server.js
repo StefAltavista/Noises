@@ -210,6 +210,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/api/password", (req, res) => {
+
     const code = " TO GENERATE THIS CODE WE NEED TO FIX CRYPTO_RANDOM_STRING";
     const message =
         "Greetings from Noises! \nHi guys, nodemailer works! to reset password we still need crypto_random_string, or to change strategy. This email has been sent by Noises (server.js file) the original project with back and front-end in the same repo/project [...] \nI hope you are well! lets have a chat soon. \nStef ";
@@ -248,21 +249,8 @@ app.post("/api/password", (req, res) => {
     //             .catch((e) => {
     //                 res.json({ e: e, success: false });
     //             });
-
-    //         // OLD SES VERSION
-    //         // sendCode(encryptedQuery)
-    //         //     .then(() => {
-    //         //         res.json({
-    //         //             e: null,
-    //         //             success:
-    //         //                 "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
-    //         //         });
-    //         //     })
-    //         //     .catch((e) => {
-    //         //         res.json({ e: e, success: false });
-    //         //     });
-    //     }
     // });
+
 });
 
 app.get("/api/password", (req, res) => {
