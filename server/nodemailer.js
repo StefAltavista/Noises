@@ -13,7 +13,7 @@ const sendEmail = (receiver, message) => {
         const options = {
             from: email,
             to: receiver,
-            subject: "subject",
+            subject: "Noises",
             text: message,
         };
 

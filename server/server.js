@@ -212,7 +212,7 @@ app.post("/login", (req, res) => {
 app.post("/api/password", (req, res) => {
     const code = " TO GENERATE THIS CODE WE NEED TO FIX CRYPTO_RANDOM_STRING";
     const message =
-        "Greeting from Noises! hi guys, nodemailer works! to reset password we still need crypto_random_string, or to change strategy. ";
+        "Greetings from Noises! \nHi guys, nodemailer works! to reset password we still need crypto_random_string, or to change strategy. This email has been sent by Noises (server.js file) the original project with back and front-end in the same repo/project [...] \nI hope you are well! lets have a chat soon. \nStef ";
     //`To reset your password follow this Link:  http://localhost:3000/api/password?tr=${code}}`;
 
     sendEmail(req.body.email, message)
