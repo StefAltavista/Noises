@@ -221,7 +221,7 @@ app.post("/api/password", (req, res) => {
             res.json({
                 e: null,
                 success:
-                    "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
+                    "A reset link has been sent to your email address! \nnotice that the link will expire in 10 minutes",
             });
         })
         .catch((e) => {

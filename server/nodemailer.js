@@ -23,7 +23,7 @@ const sendEmail = (receiver, message) => {
                 reject({ err, success: "ok" });
             }
 
-            console.log("sent!", info.response);
+            console.log("Message sent!", info.response);
             resolve({ err: null, success: "ok" });
         });
     });
