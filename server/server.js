@@ -85,6 +85,7 @@ const cryptr = new Cryptr("cryptingKey");
 const user = require("./user.js");
 const db = require("./../database/db.js");
 const { sendCode } = require("./SES.js");
+const { sendEmail } = require("./nodemailer");
 const { checkRegistration } = require("./middleware.js");
 const {
     search,
@@ -209,26 +210,59 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/api/password", (req, res) => {
-    user.passwordResetGetCode(req).then(({ e, rows }) => {
-        if (e) {
-            res.json({ error: e });
-            console.log("password reset error:", e);
-        } else {
-            const code = `code=${rows[0].code}&email=${req.body.email}`;
-            const encryptedQuery = cryptr.encrypt(code);
-            sendCode(encryptedQuery)
-                .then(() => {
-                    res.json({
-                        e: null,
-                        success:
-                            "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
-                    });
-                })
-                .catch((e) => {
-                    res.json({ e: e, success: false });
-                });
-        }
-    });
+    const code = " TO GENERATE THIS CODE WE NEED TO FIX CRYPTO_RANDOM_STRING";
+    const message =
+        "Greeting from Noises! hi guys, nodemailer works! to reset password we still need crypto_random_string, or to change strategy. ";
+    //`To reset your password follow this Link:  http://localhost:3000/api/password?tr=${code}}`;
+
+    sendEmail(req.body.email, message)
+        .then((success) => {
+            console.log(success);
+            res.json({
+                e: null,
+                success:
+                    "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
+            });
+        })
+        .catch((e) => {
+            res.json({ e: e, success: false });
+        });
+
+    //LEAVING THE OLD CODE TO CHECK FOR WHEN CRYPTO IS DONE
+    // user.passwordResetGetCode(req).then(({ e, rows }) => {
+    //     if (e) {
+    //         res.json({ error: e });
+    //         console.log("password reset error:", e);
+    //     } else {
+    //         const code = `code=${rows[0].code}&email=${req.body.email}`;
+    //         //const encryptedQuery = cryptr.encrypt(code);
+    //         const message = `To reset your password follow this Link: http://localhost:3000/api/password?tr=${code}`;
+    //         sendEmail(req.body.email, message)
+    //             .then(() => {
+    //                 res.json({
+    //                     e: null,
+    //                     success:
+    //                         "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
+    //                 });
+    //             })
+    //             .catch((e) => {
+    //                 res.json({ e: e, success: false });
+    //             });
+
+    //         // OLD SES VERSION
+    //         // sendCode(encryptedQuery)
+    //         //     .then(() => {
+    //         //         res.json({
+    //         //             e: null,
+    //         //             success:
+    //         //                 "A reset link has been sent to your email address, notice that the link will expire in 10 minutes",
+    //         //         });
+    //         //     })
+    //         //     .catch((e) => {
+    //         //         res.json({ e: e, success: false });
+    //         //     });
+    //     }
+    // });
 });
 
 app.get("/api/password", (req, res) => {
